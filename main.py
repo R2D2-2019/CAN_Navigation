@@ -3,13 +3,13 @@ from sys import platform
 import signal
 
 from client.comm import Comm
-from module.module import Navigation
+from module.module import Module
 
 should_stop = False
 
 def main():
     print("Starting application...\n")
-    nav = Navigation(Comm())
+    nav = Module(Comm())
     print("Module created...")
 
     while not should_stop:
