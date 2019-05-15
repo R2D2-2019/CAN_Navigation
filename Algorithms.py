@@ -50,9 +50,9 @@ class AStar:
             if self.open_set[lowest_index] is self.end:
                 self.path = []
                 temp = self.open_set[lowest_index]
-                self.path.append([temp.x, temp.y])
+                self.path.append(temp.get_x_y())
                 while temp.previous:
-                    self.path.append([temp.x, temp.y])
+                    self.path.append(temp.get_x_y())
                     temp = temp.previous
                 return self.path
 
