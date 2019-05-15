@@ -67,6 +67,9 @@ class Cell:
             return self['key']
         return False  # make it either an exception or error
 
+    def get_x_y(self):
+        return [self.x, self.y]
+
     # TODO: Docs
     def get_neighbors(self, x, y):
 
