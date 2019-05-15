@@ -82,9 +82,9 @@ class Cell:
             self.neighbors.append([self.x, self.y - 1])
         if self.x > 0 and self.y > 0:
             self.neighbors.append([self.x - 1, self.y - 1])
-        if self.x < x - 1 and self.y > 0:
+        if self.x < x - 1 and self.y > 0 and self.x:
             self.neighbors.append([self.x + 1, self.y - 1])
-        if self.x > 0 and self.y < y - 1:
+        if self.x > 0 and self.y < y - 1 and self.y:
             self.neighbors.append([self.x - 1, self.y - 1])
         if self.x < x - 1 and self.y < y - 1:
             self.neighbors.append([self.x + 1, self.y + 1])
