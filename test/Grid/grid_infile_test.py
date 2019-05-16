@@ -7,7 +7,7 @@ class TestGridInFile(unittest.TestCase):
     Our basic test class
     """
 
-    def test_accessibility_GridInMemory(self):
+    def test_accessibility_GridInFile(self):
         """
         The actual test.
         Any method which starts with ``test_`` will considered as a test case.
@@ -16,7 +16,7 @@ class TestGridInFile(unittest.TestCase):
         rows = 10
         cols = 10
 
-        g = GridInMemory(rows, cols)
+        g = GridInFile(rows, cols)
 
         z = [[False, True, True, False, True, True, True, False, False, True],
              [True, False, True, True, True, False, True, True, False, True],
@@ -41,7 +41,7 @@ class TestGridInFile(unittest.TestCase):
 
         self.assertEqual(False, found)
 
-    def test_accessibility_random_access_GridInMemory(self):
+    def test_accessibility_random_access_GridInFile(self):
         """
         The actual test.
         Any method which starts with ``test_`` will considered as a test case.
@@ -50,7 +50,7 @@ class TestGridInFile(unittest.TestCase):
         rows = 10
         cols = 10
 
-        g = GridInMemory(rows, cols)
+        g = GridInFile(rows, cols)
 
         z = [[False, True, True, False, True, True, True, False, False, True],
              [True, False, True, True, True, False, True, True, False, True],
@@ -69,11 +69,11 @@ class TestGridInFile(unittest.TestCase):
 
         self.assertEqual(g[(int(rows / 2), int(cols / 2))].accessible, z[int(rows / 2)][int(cols / 2)])
 
-    def test_neighbour_zero_zero_GridInMemory(self):
+    def test_neighbour_zero_zero_GridInFile(self):
         rows = 10
         cols = 10
 
-        g = GridInMemory(rows, cols)
+        g = GridInFile(rows, cols)
 
         id = g[(0, 0)]
         neighbours = g.get_neighbours(id)
@@ -87,11 +87,11 @@ class TestGridInFile(unittest.TestCase):
 
         self.assertEqual(False, duplicates)
 
-    def test_neighbour_limit_limit_GridInMemory(self):
+    def test_neighbour_limit_limit_GridInFile(self):
         rows = 10
         cols = 10
 
-        g = GridInMemory(rows, cols)
+        g = GridInFile(rows, cols)
 
         id = g[(9, 9)]
         neighbours = g.get_neighbours(id)
@@ -105,11 +105,11 @@ class TestGridInFile(unittest.TestCase):
 
         self.assertEqual(False, duplicates)
 
-    def test_neighbour_limit_bottom_GridInMemory(self):
+    def test_neighbour_limit_bottom_GridInFile(self):
         rows = 10
         cols = 10
 
-        g = GridInMemory(rows, cols)
+        g = GridInFile(rows, cols)
 
         id = g[(9, 0)]
         neighbours = g.get_neighbours(id)
@@ -124,11 +124,11 @@ class TestGridInFile(unittest.TestCase):
         self.assertEqual(False, duplicates)
 
     # TODO: Dynamic allocation
-    def test_neighbour_bottom_limit_GridInMemory(self):
+    def test_neighbour_bottom_limit_GridInFile(self):
         rows = 10
         cols = 10
 
-        g = GridInMemory(rows, cols)
+        g = GridInFile(rows, cols)
 
         id = g[(int(rows / 2), int(cols / 2))]
         neighbours = g.get_neighbours(id)
