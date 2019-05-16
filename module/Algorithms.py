@@ -61,7 +61,6 @@ class AStar:
             if self.found_check():
                 return self.traverse_path()
 
-            # TODO: Shorten line
             current_cell = self.open_set[self.l_index]
 
             neighbours = self.grid.get_neighbours(current_cell)
