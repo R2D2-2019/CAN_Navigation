@@ -1,5 +1,19 @@
 # TODO: Unit tests to ensure grid class is working as expected
 
+def GridFactory(columns=0, rows=0):
+    columns = columns
+    rows = rows
+    try:
+        columns.grid = [[Cell(j, i) for i in range(columns)]
+                     for j in range(rows)]
+    except MemoryError as error:
+        error_msg = str(error)
+        error_msg += " Too much memory is allocated using the column count of: "
+        error_msg += str(self.columns) + \
+                     " and row count of: " + str(self.rows)
+        print(error_msg)
+
+
 class Grid:
 
     def __init__(self, columns=0, rows=0):
@@ -28,16 +42,10 @@ class GridInMemory(Grid):
     def __init__(self, columns=0, rows=0):
         Grid.__init__(self, columns, rows)
 
+        self.grid = [[Cell(j, i) for i in range(self.columns)]
+                     for j in range(self.rows)]
+
         self.grid = list()
-        try:
-            self.grid = [[Cell(j, i) for i in range(self.columns)]
-                         for j in range(self.rows)]
-        except MemoryError as error:
-            error_msg = str(error)
-            error_msg += " Too much memory is allocated using the column count of: "
-            error_msg += str(self.columns) + \
-                         " and row count of: " + str(self.rows)
-            print(error_msg)
 
     def get_neighbours(self, cell):
         neighbour_index = self.get_neighbours_indexes(cell)
@@ -68,10 +76,10 @@ class GridInMemory(Grid):
         return text
 
 
-class GridInFileStorage(Grid):
+class GridInFile(Grid):
     def __init__(self, columns=0, rows=0):
         Grid.__init__(self, columns, rows)
-    
+
         def get_neighbours(self, cell):
             pass
 
