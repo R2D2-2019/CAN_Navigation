@@ -218,4 +218,7 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-local_test_file.py
+local_test_*.py
+*.dot
+/module/test_calculate_heuristic.py
+/module/test_AStar.py
