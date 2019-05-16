@@ -66,7 +66,7 @@ class Cell:
         self.neighbours = []
         self.previous = None
 
-        # TODO: Make accessability conditional
+        # TODO: Make accessibility conditional
         self.accessible = True  # Currently we only have accessible as present or not present
 
     # TODO: Docs
