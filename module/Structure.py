@@ -2,14 +2,32 @@
 
 class Grid:
 
-    # TODO: Make it a data class
     def __init__(self, columns=0, rows=0):
         self.columns = columns
         self.rows = rows
 
-        # TODO: Implement the array as a numPy Array would speed it up and require a lot less memory usage.
-        # It would drop the flexibility, however we aren't doing that many
-        # unique operations with it anyway
+    def get_neighbours(self, cell):
+        pass
+
+    def get_neighbours_indexes(self, cell):
+        pass
+
+    def __getitem__(self, lst):
+        pass
+
+    def __setitem__(self, lst, value):
+        pass
+
+    def __str__(self):
+        pass
+
+
+class GridInMemory(Grid):
+
+    # TODO: Make it a data class
+    def __init__(self, columns=0, rows=0):
+        Grid.__init__(self, columns, rows)
+
         self.grid = list()
         try:
             self.grid = [[Cell(j, i) for i in range(self.columns)]
@@ -48,6 +66,26 @@ class Grid:
                 text += str(self.grid[column][row].f)
             text += '\n'
         return text
+
+
+class GridInFileStorage(Grid):
+    def __init__(self, columns=0, rows=0):
+        Grid.__init__(self, columns, rows)
+    
+        def get_neighbours(self, cell):
+            pass
+
+        def get_neighbours_indexes(self, cell):
+            pass
+
+        def __getitem__(self, lst):
+            pass
+
+        def __setitem__(self, lst, value):
+            pass
+
+        def __str__(self):
+            pass
 
 
 # TODO unit tests
