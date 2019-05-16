@@ -4,14 +4,16 @@ from module.Structure import GridInMemory
 
 class TestGridInMemory(unittest.TestCase):
     """
-    Our basic test class
+    Basic test class for the in memory grid. Most grid classes will cohere to this basic implementation.
+    Contains:
+
+        - Accessibility access
+        - Edge cases for the neighbour gathering.
+        - Default case for the neighbour gathering
     """
 
     def test_accessibility_GridInMemory(self):
-        """
-        The actual test.
-        Any method which starts with ``test_`` will considered as a test case.
-        """
+        """ Testing if the accessibility setting is working accordingly on all memory fields """
 
         rows = 10
         cols = 10
@@ -42,10 +44,7 @@ class TestGridInMemory(unittest.TestCase):
         self.assertEqual(False, found)
 
     def test_accessibility_random_access_GridInMemory(self):
-        """
-        The actual test.
-        Any method which starts with ``test_`` will considered as a test case.
-        """
+        """ Testing if the accessibility setting is working accordingly on a random location """
 
         rows = 10
         cols = 10
@@ -70,6 +69,7 @@ class TestGridInMemory(unittest.TestCase):
         self.assertEqual(g[(int(rows / 2), int(cols / 2))].accessible, z[int(rows / 2)][int(cols / 2)])
 
     def test_neighbour_zero_zero_GridInMemory(self):
+        """ Testing if the neighbour for the [0][0] index position is working as expected """
         rows = 10
         cols = 10
 
@@ -88,6 +88,9 @@ class TestGridInMemory(unittest.TestCase):
         self.assertEqual(False, duplicates)
 
     def test_neighbour_limit_limit_GridInMemory(self):
+        """
+            Testing if the neighbour for the [limit][limit] index position is working as expected
+        """
         rows = 10
         cols = 10
 
@@ -106,6 +109,8 @@ class TestGridInMemory(unittest.TestCase):
         self.assertEqual(False, duplicates)
 
     def test_neighbour_limit_bottom_GridInMemory(self):
+        """ Testing if the neighbour for the [limit][0] index position is working as expected """
+
         rows = 10
         cols = 10
 
@@ -124,7 +129,9 @@ class TestGridInMemory(unittest.TestCase):
         self.assertEqual(False, duplicates)
 
     # TODO: Dynamic allocation
+
     def test_neighbour_bottom_limit_GridInMemory(self):
+        """ Testing if the neighbour for the [0][limit] index position is working as expected """
         rows = 10
         cols = 10
 
