@@ -21,6 +21,18 @@ class Grid:
                          " and row count of: " + str(self.rows)
             print(error_msg)
 
+    def get_neighbours(self, cell):
+        neighbour_index = self.get_neighbours_indexes(cell)
+        neighbours = list()
+        for index in neighbour_index:
+            neighbours.append(self.grid[index[0]][index[1]])
+        return neighbours
+
+    def get_neighbours_indexes(self, cell):
+        if cell.neighbours:
+            return cell.neighbours
+        return cell.get_neighbours(self.rows, self.columns)
+
     def __getitem__(self, lst):
         x, y = lst
         return self.grid[x][y]
@@ -51,7 +63,7 @@ class Cell:
 
         self.x = x
         self.y = y
-        self.neighbors = []
+        self.neighbours = []
         self.previous = None
 
         # TODO: Make accessability conditional
@@ -71,24 +83,24 @@ class Cell:
         return [self.x, self.y]
 
     # TODO: Docs
-    def get_neighbors(self, x, y):
+    def get_neighbours(self, x, y):
 
         # TODO: Loop-based not if statement based
 
         if self.x < x - 1:
-            self.neighbors.append([self.x + 1, self.y])
+            self.neighbours.append([self.x + 1, self.y])
         if self.x > 0:
-            self.neighbors.append([self.x - 1, self.y])
+            self.neighbours.append([self.x - 1, self.y])
         if self.y < y - 1:
-            self.neighbors.append([self.x, self.y + 1])
+            self.neighbours.append([self.x, self.y + 1])
         if self.y > 0:
-            self.neighbors.append([self.x, self.y - 1])
+            self.neighbours.append([self.x, self.y - 1])
         if self.x > 0 and self.y > 0:
-            self.neighbors.append([self.x - 1, self.y - 1])
+            self.neighbours.append([self.x - 1, self.y - 1])
         if self.x < x - 1 and self.y > 0 and self.x:
-            self.neighbors.append([self.x + 1, self.y - 1])
+            self.neighbours.append([self.x + 1, self.y - 1])
         if self.x > 0 and self.y < y - 1 and self.y:
-            self.neighbors.append([self.x - 1, self.y - 1])
+            self.neighbours.append([self.x - 1, self.y - 1])
         if self.x < x - 1 and self.y < y - 1:
-            self.neighbors.append([self.x + 1, self.y + 1])
-        return self.neighbors
+            self.neighbours.append([self.x + 1, self.y + 1])
+        return self.neighbours

@@ -62,15 +62,10 @@ class AStar:
                 return self.traverse_path()
 
             # TODO: Shorten line
-            indexes = self.open_set[self.l_index].get_neighbors(
-                self.grid.rows, self.grid.columns)
+            current_cell = self.open_set[self.l_index]
 
-            
-
-            neighbors = list()
-            for index in indexes:
-                neighbors.append(self.grid[(index[0], index[1])])
-            for cell in neighbors:
+            neighbours = self.grid.get_neighbours(current_cell)
+            for cell in neighbours:
                 if cell not in self.closed_set and cell.accessible:
                     temp_g = cell.g + 1
 
