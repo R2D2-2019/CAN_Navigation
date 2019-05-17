@@ -1,17 +1,9 @@
 # TODO: Unit tests to ensure grid class is working as expected
 
-def GridFactory(columns=0, rows=0):
-    columns = columns
-    rows = rows
-    try:
-        columns.grid = [[Cell(j, i) for i in range(columns)]
-                        for j in range(rows)]
-    except MemoryError as error:
-        error_msg = str(error)
-        error_msg += " Too much memory is allocated using the column count of: "
-        error_msg += str(self.columns) + \
-                     " and row count of: " + str(self.rows)
-        print(error_msg)
+
+# TODO: must contain a memory check, must return the constructed grid type (InMemory or InFile) with the limit Cell type
+def grid_factory(columns=0, rows=0):
+    pass
 
 
 class Grid:
