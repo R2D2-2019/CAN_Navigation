@@ -5,7 +5,7 @@ def GridFactory(columns=0, rows=0):
     rows = rows
     try:
         columns.grid = [[Cell(j, i) for i in range(columns)]
-                     for j in range(rows)]
+                        for j in range(rows)]
     except MemoryError as error:
         error_msg = str(error)
         error_msg += " Too much memory is allocated using the column count of: "
@@ -39,13 +39,14 @@ class Grid:
 class GridInMemory(Grid):
 
     # TODO: Make it a data class
-    def __init__(self, columns=0, rows=0):
+    def __init__(self, columns=0, rows=0, cell=None):
         Grid.__init__(self, columns, rows)
 
-        self.grid = [[Cell(j, i) for i in range(self.columns)]
-                     for j in range(self.rows)]
+        if not cell:
+            cell = CellInMemory
 
-        self.grid = list()
+        self.grid = [[cell(j, i) for i in range(self.columns)]
+                     for j in range(self.rows)]
 
     def get_neighbours(self, cell):
         neighbour_index = self.get_neighbours_indexes(cell)
@@ -57,7 +58,23 @@ class GridInMemory(Grid):
     def get_neighbours_indexes(self, cell):
         if cell.neighbours:
             return cell.neighbours
-        return cell.get_neighbours(self.rows, self.columns)
+        if cell.x < self.rows - 1:
+            cell.neighbours.append([cell.x + 1, cell.y])
+        if cell.x > 0:
+            cell.neighbours.append([cell.x - 1, cell.y])
+        if cell.y < self.columns - 1:
+            cell.neighbours.append([cell.x, cell.y + 1])
+        if cell.y > 0:
+            cell.neighbours.append([cell.x, cell.y - 1])
+        if cell.x > 0 and cell.y > 0:
+            cell.neighbours.append([cell.x - 1, cell.y - 1])
+        if cell.x < self.rows - 1 and cell.y > 0 and cell.x:
+            cell.neighbours.append([cell.x + 1, cell.y - 1])
+        if cell.x > 0 and cell.y < self.columns - 1 and cell.y:
+            cell.neighbours.append([cell.x - 1, cell.y - 1])
+        if cell.x < self.rows - 1 and cell.y < self.columns - 1:
+            cell.neighbours.append([cell.x + 1, cell.y + 1])
+        return cell.neighbours
 
     def __getitem__(self, lst):
         x, y = lst
@@ -80,29 +97,55 @@ class GridInFile(Grid):
     def __init__(self, columns=0, rows=0):
         Grid.__init__(self, columns, rows)
 
-        def get_neighbours(self, cell):
-            pass
+        # The InFile will create it's own file structure on a hard drive (in the module folder)
+        # In Order to prevent collisions we'll be using a random.random AND the epoch time to has a path
+        # While these will prevent MOSTLY prevent collisions, they aren't immune to it.
 
-        def get_neighbours_indexes(self, cell):
-            pass
+    def hash_path(self):
+        pass
 
-        def __getitem__(self, lst):
-            pass
+    def get_neighbours(self, cell):
+        pass
 
-        def __setitem__(self, lst, value):
-            pass
+    def get_neighbours_indexes(self, cell):
+        pass
 
-        def __str__(self):
-            pass
+    def __getitem__(self, lst):
+        pass
+
+    def __setitem__(self, lst, value):
+        pass
+
+    def __str__(self):
+        pass
 
 
 # TODO unit tests
 
-# TODO: Docs
+
 class Cell:
+    def __init__(self):
+        pass
+
+    def __setattr__(self, key, value):
+        pass
+
+    def __getattr__(self, item):
+        pass
+
+    def get_x_y(self):
+        pass
+
+    def get_neighbours(self):
+        pass
+
+
+# TODO: Docs
+class CellInMemory(Cell):
     # TODO: Docs
     # TODO: Make it a data class
     def __init__(self, x, y, f=0, g=0, h=0):
+        Cell.__init__(self)
         self.f = f
         self.g = g
         self.h = h
@@ -127,26 +170,3 @@ class Cell:
 
     def get_x_y(self):
         return [self.x, self.y]
-
-    # TODO: Docs
-    def get_neighbours(self, x, y):
-
-        # TODO: Loop-based not if statement based
-
-        if self.x < x - 1:
-            self.neighbours.append([self.x + 1, self.y])
-        if self.x > 0:
-            self.neighbours.append([self.x - 1, self.y])
-        if self.y < y - 1:
-            self.neighbours.append([self.x, self.y + 1])
-        if self.y > 0:
-            self.neighbours.append([self.x, self.y - 1])
-        if self.x > 0 and self.y > 0:
-            self.neighbours.append([self.x - 1, self.y - 1])
-        if self.x < x - 1 and self.y > 0 and self.x:
-            self.neighbours.append([self.x + 1, self.y - 1])
-        if self.x > 0 and self.y < y - 1 and self.y:
-            self.neighbours.append([self.x - 1, self.y - 1])
-        if self.x < x - 1 and self.y < y - 1:
-            self.neighbours.append([self.x + 1, self.y + 1])
-        return self.neighbours
