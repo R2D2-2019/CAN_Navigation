@@ -109,7 +109,7 @@ class GridInFile(Grid):
         Grid.__init__(self, columns, rows)
 
         # The InFile will create it's own file structure on a hard drive (in the module folder)
-        # In Order to prevent collisions we'll be using a random.random AND the epoch time to has a path
+        # In Order to prevent collisions we'll be using a random.random AND the epoch time to hash a path
         # While these will prevent MOSTLY prevent collisions, they aren't
         # immune to it.
 
