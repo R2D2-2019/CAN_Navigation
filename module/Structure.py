@@ -3,10 +3,6 @@
 # TODO: must contain a memory check, must return the constructed grid type (InMemory or InFile) with the limit Cell type
 
 
-def grid_factory(columns=0, rows=0):
-    return GridInMemory(columns, rows)
-
-
 class Grid:
 
     def __init__(self, columns=0, rows=0):
@@ -44,17 +40,9 @@ class GridInMemory(Grid):
 
         Grid.__init__(self, columns, rows)
 
-        # Default allocation for the memory grid is inMemory cell
-        # However it should be possible to use a different cell type
-        # The reason why is unclear at this time.
-
-        if not cell:
-            cell = CellInMemory
-
         # Scaling the grid to contain all all the cells.
         # Cells are still empty at this time, merely allocation.
-
-        self.grid = [[cell(j, i) for i in range(self.columns)] for j in
+        self.grid = [[cell_factory(j, i) for i in range(self.columns)] for j in
                      range(self.rows)]
 
     # returns the indexes of the neighbours.
@@ -180,7 +168,6 @@ class CellInMemory(Cell):
             g=0,
             h=0,
     ):
-
         """
         :param x: Can't be zero None, because the cell needs to be somewhere
         :param y: Same as X
@@ -228,3 +215,14 @@ class CellInMemory(Cell):
                     list: Returns X and Y coordinates.
         """
         return [self.x, self.y]
+
+
+def grid_factory(columns=0, rows=0):
+    return GridInMemory(columns, rows)
+
+
+def cell_factory(x, y, f=0, g=0, h=0):
+    # Default allocation for the memory grid is inMemory cell
+    # However it should be possible to use a different cell type
+    # The reason why is unclear at this time.
+    return CellInMemory(x, y, f, g, h)
