@@ -202,7 +202,7 @@ class CellInMemory(Cell):
     # TODO: Docs
 
     def set_previous(self, item):
-        if self.get_x_y() is not item.get_x_y():
+        if self.get_x_y() != item.get_x_y():
             self.previous = item
 
     def __getattr__(self, key):
