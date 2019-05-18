@@ -4,10 +4,6 @@ def calculate_heuristic(neighbor, end):
     distance = abs(neighbor.x - end.x) + abs(neighbor.y - end.y)
     return distance
 
-
-# TODO: Docs
-
-
 class Algorithm:
     def __init__(self):
         pass
@@ -53,8 +49,8 @@ class AStar(PathfindingAlgorithm):
         """
 
         :param grid: A grid or node based structure that knows indexes
-        :param start: The
-        :param end:
+        :param start: The start cell
+        :param end: The end cell
         """
         PathfindingAlgorithm.__init__(self)
         self.grid = grid
@@ -67,13 +63,13 @@ class AStar(PathfindingAlgorithm):
         self.open_set, self.closed_set = list(), list()
 
     # TODO: Docs
-    def interval_control(self):
-        pass
 
     def found_check(self):
+        """ Checking if we found our end point """
         return True if self.open_set[self.l_index] is self.end else False
 
     def continuation_check(self):
+        """ Checking if we can still continue searching """
         return True if self.open_set else False
 
     def solve(self):
@@ -94,6 +90,11 @@ class AStar(PathfindingAlgorithm):
         return True
 
     def reconstruct_path(self):
+        """
+        Starting at the last index, looping backwards to finding the path and adding to a list.
+        List is reversed in the end.
+        :return: List: The Path
+        """
         self.path = []
         temp = self.open_set[self.l_index]
         while temp.previous:
@@ -104,19 +105,33 @@ class AStar(PathfindingAlgorithm):
         return self.path
 
     def is_accessible(self, cell):
+        """
+        Checking if our cell is a wall and if we've already checked if we couldn't access it.
+        :param cell: Potential new cell
+        :return: True if we can access it false if we can't
+        """
         return True if cell not in self.closed_set and cell.accessible else False
 
     def get_lowest_index_open_set(self):
+        """
+        Acquiring the lowest index by comparing all cell.f values in open set
+        :return: None
+        """
         self.l_index = 0
         for i in range(len(self.open_set)):
             if self.open_set[i].f < self.open_set[self.l_index].f:
                 self.l_index = i
 
     def run(self):
+        """
+        The main implementation of the A* algorithm. Recommend reading the wiki pseudo-code to understand it.
+
+        :return: False if no path is found or list when path is found
+        """
         while self.continuation_check():  # checking if we still have something to read from
-            self.get_lowest_index_open_set()
-            if self.found_check():
-                return self.reconstruct_path()
+            self.get_lowest_index_open_set()  # We need to use the lowest available index to continue our search
+            if self.found_check():  # If we've found our goal, ready to finalize
+                return self.reconstruct_path()  # return with a path reconstruct function call
             current_cell = self.open_set[self.l_index]
             neighbours = self.grid.get_neighbours(current_cell)
             for cell in neighbours:
@@ -138,5 +153,5 @@ class AStar(PathfindingAlgorithm):
                         cell.set_previous(self.open_set[self.l_index])
 
             self.closed_set.append(self.open_set[self.l_index])
-            del self.open_set[self.l_index]
+            del self.open_set[self.l_index]  # ensuring that we don't come across the same element again
         return False
