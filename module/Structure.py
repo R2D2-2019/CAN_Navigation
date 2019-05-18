@@ -4,7 +4,7 @@
 
 
 def grid_factory(columns=0, rows=0):
-    pass
+    return GridInMemory(columns, rows)
 
 
 class Grid:
