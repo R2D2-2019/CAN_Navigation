@@ -1,8 +1,13 @@
-# TODO: Docs
 def calculate_heuristic(neighbor, end):
-    # using the raw distance
+    """
+    Calculating the heuristic based on coordinates of end and next cell
+    :param neighbor: cell towards the end
+    :param end:  cell where we want to end up
+    :return: int value for the distance
+    """
     distance = abs(neighbor.x - end.x) + abs(neighbor.y - end.y)
     return distance
+
 
 class Algorithm:
     def __init__(self):
