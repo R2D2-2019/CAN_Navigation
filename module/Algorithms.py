@@ -8,7 +8,33 @@ def calculate_heuristic(neighbor, end):
 # TODO: Docs
 
 
-class AStar:
+class Algorithm:
+    def __init__(self):
+        pass
+
+    def solve(self):
+        pass
+
+    def run(self):
+        pass
+
+    def run_check(self):
+        pass
+
+
+class PathfindingAlgorithm(Algorithm):
+
+    def __init__(self):
+        Algorithm.__init__(self)
+
+    def continuation_check(self):
+        pass
+
+    def found_check(self):
+        pass
+
+
+class AStar(PathfindingAlgorithm):
     """ The AStar class is the basic implementation of the A* search algorithm.
 
         The class is built using the basics of the basics, but keeping expandability in mind.
@@ -24,6 +50,7 @@ class AStar:
     """
 
     def __init__(self, grid, end=None, start=None):
+        PathfindingAlgorithm.__init__(self)
         self.grid = grid
         self.end = end
         self.start = start
@@ -42,8 +69,6 @@ class AStar:
 
     def continuation_check(self):
         return True if self.open_set else False
-
-
 
     def solve(self):
         """ :returns list | bool """
