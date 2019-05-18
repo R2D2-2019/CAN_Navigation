@@ -161,6 +161,9 @@ class Cell:
     def get_neighbours(self):
         pass
 
+    def set_previous(self, item):
+        pass
+
 
 # TODO: Docs
 
@@ -197,6 +200,10 @@ class CellInMemory(Cell):
         self.__dict__[key] = value
 
     # TODO: Docs
+
+    def set_previous(self, item):
+        if self.get_x_y() is not item.get_x_y():
+            self.previous = item
 
     def __getattr__(self, key):
         if key in ['f', 'g', 'h']:
