@@ -3,6 +3,9 @@
 # TODO: must contain a memory check, must return the constructed grid type
 # (InMemory or InFile) with the limit Cell type
 
+import json
+from attrdict import AttrDict
+
 
 class Grid:
 
@@ -156,6 +159,7 @@ class Cell:
 
 # TODO: Docs
 
+
 class CellInMemory(Cell):
     """ InMemory storage for a Cell
     Inherits from the Abstract Cell class.
@@ -210,7 +214,7 @@ class CellInMemory(Cell):
             self.previous = item
 
     def __getattr__(self, key):
-        return self['key']
+        return self[key]
 
     def get_x_y(self):
         """ Setting the previous Cell.
@@ -220,6 +224,81 @@ class CellInMemory(Cell):
                     list: Returns X and Y coordinates.
         """
         return [self.x, self.y]
+
+
+def generate_file_name(x, y):
+    return str(x) + "_" + str(y) + ".json"
+
+
+class CellInFile(Cell):
+    def __init__(self, x=0, y=0, f=0, g=0, h=0, read=True):
+        Cell.__init__(self)
+
+        #
+        self.f = f
+        self.g = g
+        self.h = h
+
+        self.x = x  # Storing the X coordinate according to the grid
+        self.y = y  # Storing the Y coordinate according to the grid
+
+        # Caching mechanism that prevents large scale I/O operations. Can
+        # operate without.
+        self.neighbours = []
+        # Used for path acquiring when an algorithm is done. It while's
+        # accessing all previous
+        self.previous = None
+        self.accessible = True  # Currently we only have accessible as present or not present
+
+        self.empty = True
+        self.file_name = generate_file_name(self.x, self.y)
+        if read:
+            self.get_file_content()
+        else:
+            self.create_file()
+
+    def clean(self):
+        """ Store all data to file and wipe all stored data in memory """
+        self.empty = True
+        self.stored = None
+
+    def create_file(self):
+        print(generate_file_name(self.x, self.y))
+        with open(self.file_name, 'w') as file:
+            print('')
+
+            stored = {
+                'x': self.x,
+                'y': self.y,
+                'f': self.f,
+                'h': self.h,
+                'g': self.g,
+                'accessible': self.accessible,
+                'neighbours': self.neighbours,
+                'previous': self.previous,
+            }
+            json.dump(stored, file)
+
+    def __setattr__(self, key, value):
+        self.__dict__[key] = value
+
+    def get_file_content(self):
+        if not self.stored:
+            with open(generate_file_name(self.x, self.y), 'r') as f:
+                for key, values in json.load(f).items():
+                    setattr(self, key, values)
+        delattr(self, 'file_name')
+
+    def set_file_content(self):
+        with open(generate_file_name(self.x, self.y), 'w') as f:
+            json.dump(self.__dict__, f)
+
+    def get_x_y(self):
+        return [self.x, self.y]
+
+    def set_previous(self, item):
+        if self.get_x_y() != item.get_x_y():
+            self.stored['previous'] = item
 
 
 def grid_factory(columns=0, rows=0):
