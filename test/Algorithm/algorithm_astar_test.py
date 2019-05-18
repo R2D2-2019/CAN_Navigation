@@ -3,7 +3,7 @@ from module.Algorithms import AStar
 from module.Structure import grid_factory
 
 
-class TestCellInMemory(unittest.TestCase):
+class TestAlgorithmAstar(unittest.TestCase):
 
     def test_grid_access(self):
         rows = 10
