@@ -230,9 +230,9 @@ def generate_file_name(x, y):
     return str(x) + "_" + str(y) + ".json"
 
 
-class CellInFile(Cell):
-    def __init__(self, x=0, y=0, f=0, g=0, h=0, read=True):
-        Cell.__init__(self)
+class CellInFile(CellInMemory):
+    def __init__(self, x=0, y=0, f=0, g=0, h=0, read=False):
+        CellInMemory.__init__(self, x=0, y=0, f=0, g=0, h=0)
 
         #
         self.f = f
@@ -257,27 +257,9 @@ class CellInFile(Cell):
         else:
             self.create_file()
 
-    def clean(self):
-        """ Store all data to file and wipe all stored data in memory """
-        self.empty = True
-        self.stored = None
-
     def create_file(self):
-        print(generate_file_name(self.x, self.y))
         with open(self.file_name, 'w') as file:
-            print('')
-
-            stored = {
-                'x': self.x,
-                'y': self.y,
-                'f': self.f,
-                'h': self.h,
-                'g': self.g,
-                'accessible': self.accessible,
-                'neighbours': self.neighbours,
-                'previous': self.previous,
-            }
-            json.dump(stored, file)
+            json.dump(self.__dict__, file)
 
     def __setattr__(self, key, value):
         self.__dict__[key] = value
@@ -292,13 +274,6 @@ class CellInFile(Cell):
     def set_file_content(self):
         with open(generate_file_name(self.x, self.y), 'w') as f:
             json.dump(self.__dict__, f)
-
-    def get_x_y(self):
-        return [self.x, self.y]
-
-    def set_previous(self, item):
-        if self.get_x_y() != item.get_x_y():
-            self.stored['previous'] = item
 
 
 def grid_factory(columns=0, rows=0):
