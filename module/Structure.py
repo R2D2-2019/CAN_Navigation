@@ -1,6 +1,7 @@
 # TODO: Unit tests to ensure grid class is working as expected
 
-# TODO: must contain a memory check, must return the constructed grid type (InMemory or InFile) with the limit Cell type
+# TODO: must contain a memory check, must return the constructed grid type
+# (InMemory or InFile) with the limit Cell type
 
 
 class Grid:
@@ -109,7 +110,8 @@ class GridInFile(Grid):
 
         # The InFile will create it's own file structure on a hard drive (in the module folder)
         # In Order to prevent collisions we'll be using a random.random AND the epoch time to has a path
-        # While these will prevent MOSTLY prevent collisions, they aren't immune to it.
+        # While these will prevent MOSTLY prevent collisions, they aren't
+        # immune to it.
 
     def hash_path(self):
         pass
@@ -185,8 +187,12 @@ class CellInMemory(Cell):
         self.x = x  # Storing the X coordinate according to the grid
         self.y = y  # Storing the Y coordinate according to the grid
 
-        self.neighbours = []  # Caching mechanism that prevents large scale I/O operations. Can operate without.
-        self.previous = None  # Used for path acquiring when an algorithm is done. It while's accessing all previous
+        # Caching mechanism that prevents large scale I/O operations. Can
+        # operate without.
+        self.neighbours = []
+        # Used for path acquiring when an algorithm is done. It while's
+        # accessing all previous
+        self.previous = None
         self.accessible = True  # Currently we only have accessible as present or not present
 
     def __setattr__(self, key, value):

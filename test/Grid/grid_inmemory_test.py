@@ -66,7 +66,8 @@ class TestGridInMemory(unittest.TestCase):
             for y in range(cols - 1):
                 g[(x, y)].accessible = z[x][y]
 
-        self.assertEqual(g[(int(rows / 2), int(cols / 2))].accessible, z[int(rows / 2)][int(cols / 2)])
+        self.assertEqual(g[(int(rows / 2), int(cols / 2))
+                           ].accessible, z[int(rows / 2)][int(cols / 2)])
 
     def test_neighbour_zero_zero_GridInMemory(self):
         """ Testing if the neighbour for the [0][0] index position is working as expected """

@@ -67,7 +67,8 @@ class TestGridInFile(unittest.TestCase):
             for y in range(cols - 1):
                 g[(x, y)].accessible = z[x][y]
 
-        self.assertEqual(g[(int(rows / 2), int(cols / 2))].accessible, z[int(rows / 2)][int(cols / 2)])
+        self.assertEqual(g[(int(rows / 2), int(cols / 2))
+                           ].accessible, z[int(rows / 2)][int(cols / 2)])
 
     def test_neighbour_zero_zero_GridInFile(self):
         rows = 10

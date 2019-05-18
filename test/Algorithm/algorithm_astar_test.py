@@ -100,7 +100,18 @@ class TestAlgorithmAstar(unittest.TestCase):
         end = g[(cols - 1, rows - 1)]
         a_star = AStar(g, start, end)
 
-        expected_path = [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8], [9, 9]]
+        expected_path = [
+            [
+                0, 0], [
+                1, 1], [
+                2, 2], [
+                    3, 3], [
+                        4, 4], [
+                            5, 5], [
+                                6, 6], [
+                                    7, 7], [
+                                        8, 8], [
+                                            9, 9]]
 
         self.assertEqual(expected_path, a_star.solve())
 
@@ -131,7 +142,18 @@ class TestAlgorithmAstar(unittest.TestCase):
 
         a_star = AStar(g, start, end)
 
-        expected_path = [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8], [9, 9]]
+        expected_path = [
+            [
+                0, 0], [
+                1, 1], [
+                2, 2], [
+                    3, 3], [
+                        4, 4], [
+                            5, 5], [
+                                6, 6], [
+                                    7, 7], [
+                                        8, 8], [
+                                            9, 9]]
 
         self.assertEqual(expected_path, a_star.solve())
 

@@ -134,7 +134,8 @@ class AStar(PathfindingAlgorithm):
         :return: False if no path is found or list when path is found
         """
         while self.continuation_check():  # checking if we still have something to read from
-            self.get_lowest_index_open_set()  # We need to use the lowest available index to continue our search
+            # We need to use the lowest available index to continue our search
+            self.get_lowest_index_open_set()
             if self.found_check():  # If we've found our goal, ready to finalize
                 return self.reconstruct_path()  # return with a path reconstruct function call
             current_cell = self.open_set[self.l_index]
@@ -158,5 +159,6 @@ class AStar(PathfindingAlgorithm):
                         cell.set_previous(self.open_set[self.l_index])
 
             self.closed_set.append(self.open_set[self.l_index])
-            del self.open_set[self.l_index]  # ensuring that we don't come across the same element again
+            # ensuring that we don't come across the same element again
+            del self.open_set[self.l_index]
         return False
