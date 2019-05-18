@@ -1,11 +1,8 @@
-# TODO: Unit tests to ensure grid class is working as expected
 
 # TODO: must contain a memory check, must return the constructed grid type
 # (InMemory or InFile) with the limit Cell type
 
 import json
-from attrdict import AttrDict
-
 
 class Grid:
 
