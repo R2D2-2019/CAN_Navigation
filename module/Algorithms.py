@@ -103,7 +103,7 @@ class AStar:
                     if new_path:
                         cell.h = calculate_heuristic(cell, self.end)
                         cell.f = cell.g + cell.h
-                        cell.previous = self.open_set[self.l_index]
+                        cell.set_previous(self.open_set[self.l_index])
 
             self.closed_set.append(self.open_set[self.l_index])
             del self.open_set[self.l_index]
