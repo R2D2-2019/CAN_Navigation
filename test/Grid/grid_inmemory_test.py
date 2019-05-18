@@ -75,8 +75,8 @@ class TestGridInMemory(unittest.TestCase):
 
         g = GridInMemory(rows, cols)
 
-        id = g[(0, 0)]
-        neighbours = g.get_neighbours(id)
+        uid = g[(0, 0)]
+        neighbours = g.get_neighbours(uid)
 
         ls = [[1, 0], [0, 1], [1, 1]]
 
@@ -96,8 +96,8 @@ class TestGridInMemory(unittest.TestCase):
 
         g = GridInMemory(rows, cols)
 
-        id = g[(9, 9)]
-        neighbours = g.get_neighbours(id)
+        uid = g[(9, 9)]
+        neighbours = g.get_neighbours(uid)
 
         ls = [[rows - 2, cols - 1], [rows - 1, cols - 1], [rows - 2, cols - 2]]
 
@@ -116,8 +116,8 @@ class TestGridInMemory(unittest.TestCase):
 
         g = GridInMemory(rows, cols)
 
-        id = g[(9, 0)]
-        neighbours = g.get_neighbours(id)
+        uid = g[(9, 0)]
+        neighbours = g.get_neighbours(uid)
 
         ls = [[rows - 2, 0], [rows - 1, 1]]
 
@@ -137,8 +137,8 @@ class TestGridInMemory(unittest.TestCase):
 
         g = GridInMemory(rows, cols)
 
-        id = g[(int(rows / 2), int(cols / 2))]
-        neighbours = g.get_neighbours(id)
+        uid = g[(int(rows / 2), int(cols / 2))]
+        neighbours = g.get_neighbours(uid)
 
         ls = [[6, 5],
               [4, 5],
