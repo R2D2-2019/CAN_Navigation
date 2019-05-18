@@ -12,6 +12,22 @@ class TestCellInMemory(unittest.TestCase):
         - Getting the x_y list
     """
 
+    def test_default_constructor_empty(self):
+        cell = CellInMemory(0, 0)
+        self.assertEqual(0, cell.f)
+        self.assertEqual(0, cell.g)
+        self.assertEqual(0, cell.h)
+
+    def test_default_constructor_filled(self):
+        cell = CellInMemory(0, 0, 1, 2, 3)
+        self.assertEqual(1, cell.f)
+        self.assertEqual(2, cell.g)
+        self.assertEqual(3, cell.h)
+
+    def test_get_x_y(self):
+        cell = CellInMemory(0, 0)
+        self.assertEqual([0, 0], cell.get_x_y())
+
 
 if __name__ == '__main__':
     unittest.main()
