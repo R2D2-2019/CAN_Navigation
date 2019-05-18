@@ -154,9 +154,6 @@ class Cell:
         pass
 
 
-# TODO: Docs
-
-
 class CellInMemory(Cell):
     """ InMemory storage for a Cell
     Inherits from the Abstract Cell class.
