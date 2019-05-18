@@ -46,14 +46,12 @@ class GridInMemory(Grid):
         self.grid = [[cell_factory(j, i) for i in range(self.columns)] for j in
                      range(self.rows)]
 
-    # returns the indexes of the neighbours.
-    # Separated because Look up isn't always required and for cohesion reasons
-
     def get_neighbours_indexes(self, cell):
+        """
+        Returns the indexes of the neighbours of a cell in a list
 
+        """
         # Checking if there's a cached version
-        # TODO: Allocate the cache dynamic. Perhaps caching the difference.
-
         if cell.neighbours:
             return cell.neighbours
 
@@ -95,6 +93,7 @@ class GridInMemory(Grid):
         self.grid[x][y].f = value
 
     def __str__(self):
+        """Returns printable version of the grid"""
         text = ''
         for column in range(self.columns):
             for row in range(self.rows):
@@ -171,11 +170,11 @@ class CellInMemory(Cell):
             h=0,
     ):
         """
-        :param x: Can't be zero None, because the cell needs to be somewhere
-        :param y: Same as X
-        :param f: Heuristic based distance to end
-        :param g: Cost of getting from the start cell to this cell
-        :param h: Heuristic distance
+        x: Can't be zero None, because the cell needs to be somewhere
+        y: Same as X
+        f: Heuristic based distance to end
+        g: Cost of getting from the start cell to this cell
+        h: Heuristic distance
         """
         Cell.__init__(self)
 
@@ -203,8 +202,8 @@ class CellInMemory(Cell):
         """ Setting the previous Cell.
         Detects if the item points to itself.
 
-        Args:
-            item (obj): Cell like object that has get_x_y function.
+
+        item (obj): Cell like object that has get_x_y function.
 
         """
         if self.get_x_y() != item.get_x_y():
