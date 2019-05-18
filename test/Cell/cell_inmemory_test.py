@@ -28,6 +28,34 @@ class TestCellInMemory(unittest.TestCase):
         cell = CellInMemory(0, 0)
         self.assertEqual([0, 0], cell.get_x_y())
 
+    def test_get_accessible_default(self):
+        cell = CellInMemory(0, 0)
+        self.assertEqual(True, cell.accessible)
+
+    def test_get_accessible_false(self):
+        cell = CellInMemory(0, 0)
+        cell.accessible = False
+        self.assertEqual(False, cell.accessible)
+
+    def test_get_accessible_accessed(self):
+        cell = CellInMemory(0, 0)
+        cell.accessible = True
+        self.assertEqual(True, cell.accessible)
+
+    def test_previous_cell_correct(self):
+        cell = CellInMemory(0, 0)
+        cell_previous = CellInMemory(0, 1)
+        cell.set_previous(cell_previous)
+
+        self.assertEqual(cell_previous, cell.previous)
+
+    def test_previous_cell_duplicate(self):
+        cell = CellInMemory(0, 0)
+        cell_previous = CellInMemory(0, 0)
+        cell.set_previous(cell_previous)
+
+        self.assertEqual(None, cell.previous)
+
 
 if __name__ == '__main__':
     unittest.main()
