@@ -168,9 +168,9 @@ class Cell:
 # TODO: Docs
 
 class CellInMemory(Cell):
-
-    # TODO: Docs
-    # TODO: Make it a data class
+    """ InMemory storage for a Cell
+    Inherits from the Abstract Cell class.
+    """
 
     def __init__(
             self,
@@ -180,35 +180,51 @@ class CellInMemory(Cell):
             g=0,
             h=0,
     ):
+
+        """
+        :param x: Can't be zero None, because the cell needs to be somewhere
+        :param y: Same as X
+        :param f: Heuristic based distance to end
+        :param g: Cost of getting from the start cell to this cell
+        :param h: Heuristic distance
+        """
         Cell.__init__(self)
+
+        #
         self.f = f
         self.g = g
         self.h = h
 
-        self.x = x
-        self.y = y
-        self.neighbours = []
-        self.previous = None
+        self.x = x  # Storing the X coordinate according to the grid
+        self.y = y  # Storing the Y coordinate according to the grid
 
-        # TODO: Make accessibility conditional
-
+        self.neighbours = []  # Caching mechanism that prevents large scale I/O operations. Can operate without.
+        self.previous = None  # Used for path acquiring when an algorithm is done. It while's accessing all previous
         self.accessible = True  # Currently we only have accessible as present or not present
 
-    # TODO: Docs
-
     def __setattr__(self, key, value):
+        # Currently used to update the f/g/h, accessibility and neighbours
         self.__dict__[key] = value
 
-    # TODO: Docs
-
     def set_previous(self, item):
+        """ Setting the previous Cell.
+        Detects if the item points to itself.
+
+        Args:
+            item (obj): Cell like object that has get_x_y function.
+
+        """
         if self.get_x_y() != item.get_x_y():
             self.previous = item
 
     def __getattr__(self, key):
-        if key in ['f', 'g', 'h']:
-            return self['key']
-        return False  # make it either an exception or error
+        return self['key']
 
     def get_x_y(self):
+        """ Setting the previous Cell.
+                Detects if the item points to itself.
+
+                Returns:
+                    list: Returns X and Y coordinates.
+        """
         return [self.x, self.y]
