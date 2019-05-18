@@ -49,7 +49,13 @@ class AStar(PathfindingAlgorithm):
 
     """
 
-    def __init__(self, grid, end=None, start=None):
+    def __init__(self, grid, start=None, end=None):
+        """
+
+        :param grid: A grid or node based structure that knows indexes
+        :param start: The
+        :param end:
+        """
         PathfindingAlgorithm.__init__(self)
         self.grid = grid
         self.end = end
@@ -94,6 +100,7 @@ class AStar(PathfindingAlgorithm):
             self.path.append(temp.get_x_y())
             temp = temp.previous
         self.path.append(self.start.get_x_y())
+        self.path.reverse()
         return self.path
 
     def is_accessible(self, cell):
