@@ -86,7 +86,7 @@ class TestCellInFile(unittest.TestCase):
         Testing if the content field actually contains what we think it contains
         """
 
-        self.assertEqual(None,None)
+        self.assertEqual(None, None)
 
     def test_adding_unspecified_cell_field(self):
         """
