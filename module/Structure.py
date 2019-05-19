@@ -4,6 +4,7 @@
 
 import json
 
+
 class Grid:
 
     def __init__(self, columns=0, rows=0):
@@ -208,7 +209,7 @@ class CellInMemory(Cell):
             self.previous = item
 
     def __getattr__(self, key):
-        return self[key]
+        return object.__getattribute__(self, key)
 
     def get_x_y(self):
         """ Setting the previous Cell.
