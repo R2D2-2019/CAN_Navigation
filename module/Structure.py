@@ -227,6 +227,8 @@ def generate_file_name(x, y):
 class CellInFile(CellInMemory):
     def __init__(self, x=0, y=0, f=0, g=0, h=0, read=False):
         CellInMemory.__init__(self, x, y, f, g, h)
+        self.x = x
+        self.y = y
         if read:
             self.get_file_content()
         else:
@@ -257,6 +259,9 @@ class CellInFile(CellInMemory):
         """
         with open(generate_file_name(self.x, self.y), 'w') as f:
             json.dump(self.__dict__, f)
+
+    def __delete__(self, instance):
+        self.set_file_content()
 
 
 def grid_factory(columns=0, rows=0):
