@@ -83,17 +83,13 @@ class TestCellInFile(unittest.TestCase):
 
     def test_cell_storage(self):
         """
-        Testing if the content field actually contains what we think it contains
+        Testing if the file contains the expected json string
         """
-
-        self.assertEqual(None, None)
-
-    def test_adding_unspecified_cell_field(self):
-        """
-        Testing if the addition of a unspecified cell field works as expected
-        """
-
-        self.assertEqual(None, None)
+        cell = CellInFile(0, 0)
+        expected_json = '{"f": 0, "g": 0, "h": 0, "x": 0, "y": 0, "neighbours": [], "previous": null, "accessible": true, "empty": true, "file_name": "0_0.json"}'
+        with open(cell.file_name, 'r') as f:
+            actual_json = f.readline()
+        self.assertEqual(expected_json, actual_json)
 
 
 if __name__ == '__main__':
