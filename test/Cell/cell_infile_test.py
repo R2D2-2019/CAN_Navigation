@@ -86,10 +86,35 @@ class TestCellInFile(unittest.TestCase):
         Testing if the file contains the expected json string
         """
         cell = CellInFile(0, 0)
-        expected_json = '{"f": 0, "g": 0, "h": 0, "x": 0, "y": 0, "neighbours": [], "previous": null, "accessible": true, "empty": true, "file_name": "0_0.json"}'
+        expected_json = '{"f": 0, "g": 0, "h": 0, "x": 0, "y": 0, "neighbours": [], "previous": null, "accessible": true, "file_name": "0_0.json"}'
+        actual_json = ""
         with open(cell.file_name, 'r') as f:
             actual_json = f.readline()
         self.assertEqual(expected_json, actual_json)
+
+    def test_cell_validating_read_data(self):
+        """
+        Testing if the addition of an existing field works as expected
+        """
+        cell = CellInFile(0, 0)
+        cell.neighbours = ["test"]
+        cell.set_file_content()
+        del cell
+        cell_reopen = CellInFile(0, 0, read=True)
+
+        self.assertEqual(["test"], cell_reopen.neighbours)
+
+    def test_cell_validating_new_read_data(self):
+        """
+        Testing if the addition of a unspecified (a.k.a a new cell) field works as expected
+        """
+        cell = CellInFile(0, 0)
+        cell.test_file = "test"
+        cell.set_file_content()
+        del cell
+        cell_reopen = CellInFile(0, 0, read=True)
+
+        self.assertEqual("test", cell_reopen.test_file)
 
 
 if __name__ == '__main__':
