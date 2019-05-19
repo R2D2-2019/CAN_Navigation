@@ -1,4 +1,3 @@
-
 # TODO: must contain a memory check, must return the constructed grid type
 # (InMemory or InFile) with the limit Cell type
 
@@ -227,46 +226,35 @@ def generate_file_name(x, y):
 
 class CellInFile(CellInMemory):
     def __init__(self, x=0, y=0, f=0, g=0, h=0, read=False):
-        CellInMemory.__init__(self, x=0, y=0, f=0, g=0, h=0)
-
-        #
-        self.f = f
-        self.g = g
-        self.h = h
-
-        self.x = x  # Storing the X coordinate according to the grid
-        self.y = y  # Storing the Y coordinate according to the grid
-
-        # Caching mechanism that prevents large scale I/O operations. Can
-        # operate without.
-        self.neighbours = []
-        # Used for path acquiring when an algorithm is done. It while's
-        # accessing all previous
-        self.previous = None
-        self.accessible = True  # Currently we only have accessible as present or not present
-
-        self.empty = True
-        self.file_name = generate_file_name(self.x, self.y)
+        CellInMemory.__init__(self, x, y, f, g, h)
         if read:
             self.get_file_content()
         else:
-            self.create_file()
-
-    def create_file(self):
-        with open(self.file_name, 'w') as file:
-            json.dump(self.__dict__, file)
+            self.file_name = generate_file_name(self.x, self.y)
+            self.set_file_content()
 
     def __setattr__(self, key, value):
+        """ Setting a new attribute to the internal dict.
+
+        Keep in mind that these variables will also be stored in the file.
+        """
         self.__dict__[key] = value
 
     def get_file_content(self):
-        if not self.stored:
-            with open(generate_file_name(self.x, self.y), 'r') as f:
-                for key, values in json.load(f).items():
-                    setattr(self, key, values)
+        """ Getting the content from a file and storing it in the object.
+        Afterwards removing the file_name, conserve memory and can be generated.
+        """
+
+        with open(generate_file_name(self.x, self.y), 'r') as f:
+            for key, values in json.load(f).items():
+                setattr(self, key, values)
         delattr(self, 'file_name')
 
     def set_file_content(self):
+        """ Getting the content from a cell in file object.
+        Using the native json.dump function to store it in a JSON string.
+        Uses the __dict__ call to store ALL object attributes
+        """
         with open(generate_file_name(self.x, self.y), 'w') as f:
             json.dump(self.__dict__, f)
 
