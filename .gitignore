@@ -222,3 +222,5 @@ local_test_*.py
 *.dot
 /module/test_calculate_heuristic.py
 /module/test_AStar.py
+
+*.json
