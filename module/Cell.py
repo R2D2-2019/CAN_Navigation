@@ -79,9 +79,7 @@ class CellInMemory(Cell):
         return object.__getattribute__(self, key)
 
     def get_x_y(self):
-        """ Setting the previous Cell.
-                Detects if the item points to itself.
-
+        """ Getting the  Cell X and Y coordinates.
                 Returns:
                     list: Returns X and Y coordinates.
         """
@@ -121,7 +119,7 @@ class CellInFile(CellInMemory):
         delattr(self, 'file_name')
 
     def set_file_content(self):
-        """ Getting the content from a cell in file object.
+        """ Setting the content from a cell in file object.
         Using the native json.dump function to store it in a JSON string.
         Uses the __dict__ call to store ALL object attributes
         """
