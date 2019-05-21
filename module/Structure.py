@@ -151,7 +151,9 @@ class GridInFile(GridInMemory):
         pass
 
     def get_file_content(self):
-        pass
+        with open(self.file_name, 'r') as f:
+            for key, values in json.load(f).items():
+                setattr(self, key, values)
 
     def set_file_content(self):
 
@@ -161,6 +163,7 @@ class GridInFile(GridInMemory):
         """
         with open(self.file_name, 'w') as f:
             json.dump(self.__dict__, f)
+        self.grid = None
 
     def get_grid(self):
         if not self.in_memory():
