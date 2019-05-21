@@ -77,16 +77,10 @@ class TestGridInFile(unittest.TestCase):
         g = GridInFile(rows, cols)
 
         uid = g[(0, 0)]
-        neighbours = g.get_neighbours(uid)
 
         ls = [[1, 0], [0, 1], [1, 1]]
 
-        duplicates = False
-        for neighbour in neighbours:
-            if neighbour in ls:
-                duplicates = True
-
-        self.assertEqual(False, duplicates)
+        self.assertEqual(g.get_neighbours(uid), ls)
 
     def test_neighbour_limit_limit_GridInFile(self):
         """
@@ -98,16 +92,10 @@ class TestGridInFile(unittest.TestCase):
         g = GridInFile(rows, cols)
 
         uid = g[(9, 9)]
-        neighbours = g.get_neighbours(uid)
 
         ls = [[rows - 2, cols - 1], [rows - 1, cols - 1], [rows - 2, cols - 2]]
-
-        duplicates = False
-        for neighbour in neighbours:
-            if neighbour in ls:
-                duplicates = True
-
-        self.assertEqual(False, duplicates)
+        print(g.get_neighbours(uid))
+        self.assertEqual(g.get_neighbours(uid), ls)
 
     def test_neighbour_limit_bottom_GridInFile(self):
         """ Testing if the neighbour for the [limit][0] index position is working as expected """
@@ -118,16 +106,10 @@ class TestGridInFile(unittest.TestCase):
         g = GridInFile(rows, cols)
 
         uid = g[(9, 0)]
-        neighbours = g.get_neighbours(uid)
 
         ls = [[rows - 2, 0], [rows - 1, 1]]
 
-        duplicates = False
-        for neighbour in neighbours:
-            if neighbour in ls:
-                duplicates = True
-
-        self.assertEqual(False, duplicates)
+        self.assertEqual(g.get_neighbours(uid), ls)
 
     def test_neighbour_bottom_limit_GridInFile(self):
         """ Testing if the neighbour for the [0][limit] index position is working as expected """
@@ -137,7 +119,6 @@ class TestGridInFile(unittest.TestCase):
         g = GridInFile(rows, cols)
 
         uid = g[(int(rows / 2), int(cols / 2))]
-        neighbours = g.get_neighbours(uid)
 
         ls = [[6, 5],
               [4, 5],
@@ -148,36 +129,20 @@ class TestGridInFile(unittest.TestCase):
               [4, 4],
               [6, 6]]
 
-        duplicates = False
-        for neighbour in neighbours:
-            if neighbour in ls:
-                duplicates = True
-
-        self.assertEqual(False, duplicates)
+        self.assertEqual(g.get_neighbours(uid), ls)
 
     def test_hash(self):
-        """ A bit of a finicky test, because we need to make an educated guess if the epoch time is ~correct"""
+        """ Testing if our hash method works as expected,
+        hashing can be made far more difficult so this will serve as a template.
+        """
         rows = 10
         cols = 10
 
-        epoch_time = time.time()
         g = GridInFile(rows, cols)
 
-        hash = g.hash().split("_")
-        epoch = hash[0]
-        positive_epoch = epoch_time + 60
-        negative_epoch = epoch_time - 60
-        row_count = hash[1]
-        col_count = hash[2]
+        epoch = str(g.epoch_time) + "_10_10.json"
 
-        epoch_comparison = False
-        # TODO: Simplify
-        if negative_epoch < epoch and positive_epoch > epoch:
-            epoch_comparison = True
-
-        self.assertEqual(True, epoch_comparison)
-        self.assertEqual(rows, row_count)
-        self.assertEqual(cols, col_count)
+        self.assertEqual(g.file_name, epoch)
 
 
 if __name__ == '__main__':
