@@ -145,10 +145,14 @@ class GridInFile(GridInMemory):
         self.set_file_content()
 
     def get_neighbours(self, cell):
-        pass
-
-    def get_neighbours_indexes(self, cell):
-        pass
+        self.get_grid()
+        neighbour_index = self.get_neighbours_indexes(cell)
+        neighbours = list()
+        # TODO: Solve indexes that are empty arrays
+        neighbour_index = [x for x in neighbour_index if x != []]  # Unsure what causes empty lists
+        for x, y in neighbour_index:
+            neighbours.append([x, y])
+        return neighbours
 
     # TODO: Perhaps the set and get functions from the structure and cell should be static.
     def get_file_content(self):
@@ -175,12 +179,13 @@ class GridInFile(GridInMemory):
     def in_memory(self):
         return True if self.grid else False
 
-    def in_grid(self, x, y):
+    def in_grid(self, x, y, clear=True):
         self.get_grid()
         found = False
         if [x, y] in self.grid:
             found = True
-        self.grid = None
+        if clear:
+            self.grid = None
         return found
 
     def __getitem__(self, coordinates):
@@ -190,7 +195,9 @@ class GridInFile(GridInMemory):
         return False
 
     def __setitem__(self, lst, value):
-        pass
+        (x, y) = lst
+        c = CellInFile(x, y, read=True)
+        CellInFile(x, y, c.f, c.g, c.h, read=False)
 
     def __str__(self):
         pass
