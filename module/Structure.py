@@ -117,7 +117,7 @@ class GridInFile(GridInMemory):
         GridInMemory.__init__(self, columns, rows)
         self.grid = list()
 
-        epoch_time = time.time()
+        self.epoch_time = time.time()
         # The InFile will create it's own file structure on a hard drive (in the module folder)
         # In Order to prevent collisions we'll be using a random.random AND the epoch time to hash a path
         # While these will prevent MOSTLY prevent collisions, they aren't
