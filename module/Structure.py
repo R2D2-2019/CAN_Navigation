@@ -114,18 +114,21 @@ class GridInMemory(Grid):
 class GridInFile(GridInMemory):
 
     def __init__(self, columns=0, rows=0):
+        # The InFile will create it's own file structure on a hard drive (in the module folder)
+        # In Order to prevent collisions we'll be using the epoch time and the grid size to hash a path
+        # While these will prevent MOSTLY prevent collisions, they aren't
+        # immune to it.
         GridInMemory.__init__(self, columns, rows)
         self.grid = list()
 
         self.epoch_time = time.time()
-        # The InFile will create it's own file structure on a hard drive (in the module folder)
-        # In Order to prevent collisions we'll be using a random.random AND the epoch time to hash a path
-        # While these will prevent MOSTLY prevent collisions, they aren't
-        # immune to it.
+        self.file_name = None
+
+        self.hash_path()
         self.initialize_grid()
 
     def hash_path(self):
-        return str(int(self.epoch_time)) + "_" + str(self.columns) + "_" + str(self.rows) + ".json"
+        self.file_name = str(int(self.epoch_time)) + "_" + str(self.columns) + "_" + str(self.rows) + ".json"
 
     def generate_grid(self):
         # Ensuring that the cell objects exist
@@ -151,6 +154,7 @@ class GridInFile(GridInMemory):
         pass
 
     def set_file_content(self):
+
         pass
 
     def get_grid(self):
