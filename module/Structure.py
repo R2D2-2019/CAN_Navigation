@@ -3,7 +3,7 @@
 
 
 from module.Cell import CellInMemory
-
+from time import time
 
 def cell_factory(x, y, f=0, g=0, h=0):
     # Default allocation for the memory grid is inMemory cell
@@ -115,6 +115,8 @@ class GridInFile(GridInMemory):
     def __init__(self, columns=0, rows=0):
         GridInMemory.__init__(self, columns, rows)
         self.grid = [10]
+
+        epoch_time = time.time()
         # The InFile will create it's own file structure on a hard drive (in the module folder)
         # In Order to prevent collisions we'll be using a random.random AND the epoch time to hash a path
         # While these will prevent MOSTLY prevent collisions, they aren't
