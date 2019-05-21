@@ -2,8 +2,9 @@
 # (InMemory or InFile) with the limit Cell type
 
 
-from module.Cell import CellInMemory
-from time import time
+from module.Cell import CellInMemory, CellInFile
+import time
+
 
 def cell_factory(x, y, f=0, g=0, h=0):
     # Default allocation for the memory grid is inMemory cell
@@ -114,7 +115,7 @@ class GridInFile(GridInMemory):
 
     def __init__(self, columns=0, rows=0):
         GridInMemory.__init__(self, columns, rows)
-        self.grid = None
+        self.grid = list()
 
         epoch_time = time.time()
         # The InFile will create it's own file structure on a hard drive (in the module folder)
@@ -126,7 +127,18 @@ class GridInFile(GridInMemory):
     def hash_path(self):
         pass
 
+    def generate_grid(self):
+        # Ensuring that the cell objects exist
+        for i in range(0, self.columns):
+            for j in range(0, self.rows):
+                CellInFile(i, j)  # We don't need to store them, because we can just rebuild them when we need them
+
+        for i in range(0, self.columns):
+            for j in range(0, self.rows):
+                self.grid.append([i, j])
+
     def initialize_grid(self):
+        self.generate_grid()
         self.set_file_content()
 
     def get_neighbours(self, cell):
