@@ -69,7 +69,7 @@ class TestCellInFile(unittest.TestCase):
         cell_previous = CellInFile(0, 1)
         cell.set_previous(cell_previous)
 
-        self.assertEqual(cell_previous, cell.previous)
+        self.assertEqual(cell_previous.get_x_y(), cell.previous)
 
     def test_previous_cell_duplicate(self):
         """
@@ -86,7 +86,7 @@ class TestCellInFile(unittest.TestCase):
         Testing if the file contains the expected json string
         """
         cell = CellInFile(0, 0)
-        expected_json = '{"f": 0, "g": 0, "h": 0, "x": 0, "y": 0, "neighbours": [], "previous": null, "accessible": true, "file_name": "0_0.json"}'
+        expected_json = '{"file_name": "0_0.json", "f": 0, "g": 0, "h": 0, "x": 0, "y": 0, "neighbours": [], "previous": null, "accessible": true}'
         actual_json = ""
         with open(cell.file_name, 'r') as f:
             actual_json = f.readline()
