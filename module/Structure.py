@@ -146,7 +146,7 @@ class GridInFile(GridInMemory):
 
     def get_neighbours(self, cell):
         self.get_grid()
-        neighbour_index = self.get_neighbours_indexes(cell)
+        neighbour_index = self.get_neighbours_indexes(cell)  # Redirecting the call to the super.
         neighbours = list()
         # TODO: Solve indexes that are empty arrays
         neighbour_index = [x for x in neighbour_index if x != []]  # Unsure what causes empty lists
