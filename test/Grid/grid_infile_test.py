@@ -4,7 +4,7 @@ from module.Structure import GridInFile
 
 class TestGridInFile(unittest.TestCase):
     """
-    Basic test class for the in memory grid. Most grid classes will cohere to this basic implementation.
+    Basic test class for the in file grid. Most grid classes will cohere to this basic implementation.
     Contains:
 
         - Accessibility access
@@ -13,7 +13,7 @@ class TestGridInFile(unittest.TestCase):
     """
 
     def test_accessibility_GridInFile(self):
-        """ Testing if the accessibility setting is working accordingly on all memory fields """
+        """ Testing if the accessibility setting is working accordingly on all file fields """
 
         rows = 10
         cols = 10
