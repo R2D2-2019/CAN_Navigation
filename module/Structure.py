@@ -114,7 +114,7 @@ class GridInFile(GridInMemory):
 
     def __init__(self, columns=0, rows=0):
         GridInMemory.__init__(self, columns, rows)
-        self.grid = [10]
+        self.grid = None
 
         epoch_time = time.time()
         # The InFile will create it's own file structure on a hard drive (in the module folder)
