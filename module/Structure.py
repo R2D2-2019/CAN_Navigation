@@ -177,9 +177,11 @@ class GridInFile(GridInMemory):
 
     def in_grid(self, x, y):
         self.get_grid()
+        found = False
         if [x, y] in self.grid:
-            return True
-        return False
+            found = True
+        self.grid = None
+        return found
 
     def __getitem__(self, coordinates):
         (x, y) = coordinates
