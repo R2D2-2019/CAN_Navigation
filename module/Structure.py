@@ -185,7 +185,7 @@ class GridInFile(GridInMemory):
 
     def __getitem__(self, coordinates):
         (x, y) = coordinates
-        if self.in_grid(coordinates):
+        if self.in_grid(x, y):
             return CellInFile(x, y, read=True)
         return False
 
