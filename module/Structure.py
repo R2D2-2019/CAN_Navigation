@@ -176,8 +176,10 @@ class GridInFile(GridInMemory):
         return True if self.grid else False
 
     def __getitem__(self, lst):
-        pass
-
+        self.get_grid()
+        (x, y) = lst
+        return CellInFile(x, y, read=True)
+    
     def __setitem__(self, lst, value):
         pass
 
