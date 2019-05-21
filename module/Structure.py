@@ -3,7 +3,7 @@
 
 
 from module.Cell import CellInMemory, CellInFile
-import time
+import time, json
 
 
 def cell_factory(x, y, f=0, g=0, h=0):
@@ -155,7 +155,12 @@ class GridInFile(GridInMemory):
 
     def set_file_content(self):
 
-        pass
+        """ Setting the content from a grid file in file object.
+        Using the native json.dump function to store it in a JSON string.
+        Uses the __dict__ call to store ALL object attributes
+        """
+        with open(self.file_name, 'w') as f:
+            json.dump(self.__dict__, f)
 
     def get_grid(self):
         if not self.in_memory():
