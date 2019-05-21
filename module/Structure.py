@@ -195,7 +195,6 @@ class GridInFile(GridInMemory):
         return False
 
     def __setitem__(self, lst, value):
-        print("set")
         (x, y) = lst
         c = CellInFile(x, y, read=True)
         CellInFile(x, y, c.f, c.g, c.h, read=False)
