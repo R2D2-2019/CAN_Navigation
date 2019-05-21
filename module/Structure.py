@@ -150,13 +150,15 @@ class GridInFile(GridInMemory):
     def get_neighbours_indexes(self, cell):
         pass
 
+    # TODO: Perhaps the set and get functions from the structure and cell should be static.
     def get_file_content(self):
+        """ Getting the content from a file and storing it in the object.
+        """
         with open(self.file_name, 'r') as f:
             for key, values in json.load(f).items():
                 setattr(self, key, values)
 
     def set_file_content(self):
-
         """ Setting the content from a grid file in file object.
         Using the native json.dump function to store it in a JSON string.
         Uses the __dict__ call to store ALL object attributes
