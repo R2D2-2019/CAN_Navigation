@@ -125,7 +125,7 @@ class GridInFile(GridInMemory):
         self.initialize_grid()
 
     def hash_path(self):
-        pass
+        return str(int(self.epoch_time)) + "_" + str(self.columns) + "_" + str(self.rows) + ".json"
 
     def generate_grid(self):
         # Ensuring that the cell objects exist
