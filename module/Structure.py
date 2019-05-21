@@ -4,11 +4,13 @@
 
 from module.Cell import CellInMemory
 
+
 def cell_factory(x, y, f=0, g=0, h=0):
     # Default allocation for the memory grid is inMemory cell
     # However it should be possible to use a different cell type
     # The reason why is unclear at this time.
     return CellInMemory(x, y, f, g, h)
+
 
 class Grid:
 
@@ -108,24 +110,42 @@ class GridInMemory(Grid):
         return text
 
 
-class GridInFile(Grid):
+class GridInFile(GridInMemory):
 
     def __init__(self, columns=0, rows=0):
-        Grid.__init__(self, columns, rows)
-
+        GridInMemory.__init__(self, columns, rows)
+        self.grid = [10]
         # The InFile will create it's own file structure on a hard drive (in the module folder)
         # In Order to prevent collisions we'll be using a random.random AND the epoch time to hash a path
         # While these will prevent MOSTLY prevent collisions, they aren't
         # immune to it.
+        self.initialize_grid()
 
     def hash_path(self):
         pass
+
+    def initialize_grid(self):
+        self.set_file_content()
 
     def get_neighbours(self, cell):
         pass
 
     def get_neighbours_indexes(self, cell):
         pass
+
+    def get_file_content(self):
+        pass
+
+    def set_file_content(self):
+        pass
+
+    def get_grid(self):
+        if not self.in_memory():
+            self.get_file_content()
+        return self.grid
+
+    def in_memory(self):
+        return True if self.grid else False
 
     def __getitem__(self, lst):
         pass
@@ -137,9 +157,5 @@ class GridInFile(Grid):
         pass
 
 
-
 def grid_factory(columns=0, rows=0):
     return GridInMemory(columns, rows)
-
-
-
