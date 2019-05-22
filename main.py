@@ -6,7 +6,7 @@ import signal
 import threading
 import queue
 from client.comm import Comm
-from module.module import NavigationModule
+from module.mod import NavigationModule
 
 SHOULD_STOP = False
 
