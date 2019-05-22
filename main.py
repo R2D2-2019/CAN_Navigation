@@ -29,7 +29,7 @@ def main():
     nav = NavigationModule(Comm())
     print("Module created...")
 
-    while not should_stop:
+    while not SHOULD_STOP:
         if (input_queue.qsize() > 0):
             input_str = input_queue.get()
             print("input was: {} ".format(input_str))
