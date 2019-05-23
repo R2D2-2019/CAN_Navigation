@@ -23,7 +23,7 @@ class Algorithm:
         pass
 
 
-class PathfindingAlgorithm(Algorithm):
+class PathfinderAlgorithm(Algorithm):
 
     def __init__(self):
         Algorithm.__init__(self)
@@ -35,7 +35,7 @@ class PathfindingAlgorithm(Algorithm):
         pass
 
 
-class AStar(PathfindingAlgorithm):
+class AStar(PathfinderAlgorithm):
     """ The AStar class is the basic implementation of the A* search algorithm.
 
         The class is built using the basics of the basics, but keeping expandability in mind.
@@ -57,7 +57,7 @@ class AStar(PathfindingAlgorithm):
         :param start: The start cell
         :param end: The end cell
         """
-        PathfindingAlgorithm.__init__(self)
+        PathfinderAlgorithm.__init__(self)
         self.grid = grid
         self.end = end
         self.start = start
