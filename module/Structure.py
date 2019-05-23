@@ -203,6 +203,10 @@ class GridInFile(GridInMemory):
         c = CellInFile(x, y, read=True)
         CellInFile(x, y, c.f, c.g, c.h, read=False)
 
+    def remove_json_files(self):
+        import shutil
+        shutil.rmtree(self.directory_name)
+
     def __str__(self):
         pass
 
