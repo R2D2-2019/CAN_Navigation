@@ -149,6 +149,20 @@ class AStar(PathfindingAlgorithm):
         """
         pass
 
+    def iteration_path_found(self):
+        """
+        Function that's being called when a path has been found.
+        This function is merely here for overriding by child.
+        """
+        pass
+
+    def iteration_no_path_found(self):
+        """
+        Function that's being called when a path has been found.
+        This function is merely here for overriding by child.
+        """
+        pass
+
 
     def run(self):
         """
@@ -161,7 +175,9 @@ class AStar(PathfindingAlgorithm):
             self.iteration_start()
             self.get_lowest_index_open_set()
             if self.found_check():  # If we've found our goal, ready to finalize
-                return self.reconstruct_path()  # return with a path reconstruct function call
+                self.reconstruct_path()
+                self.iteration_path_found()
+                return self.path   # return with a path reconstruct function call
             self.current_cell = self.open_set[self.l_index]
             neighbours = self.grid.get_neighbours(self.current_cell)
             self.iteration_neighbours(neighbours)
@@ -187,4 +203,5 @@ class AStar(PathfindingAlgorithm):
             # ensuring that we don't come across the same element again
             del self.open_set[self.l_index]
             self.iteration_end()
+        self.iteration_no_path_found()
         return False
