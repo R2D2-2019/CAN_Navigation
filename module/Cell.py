@@ -87,7 +87,7 @@ class CellInMemory(Cell):
 
 
 def generate_file_name(x, y):
-    return str(x) + "_" + str(y) + ".json"
+    return "Cell/" + str(x) + "_" + str(y) + ".json"
 
 
 class CellInFile(CellInMemory):

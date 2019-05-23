@@ -124,11 +124,15 @@ class GridInFile(GridInMemory):
         self.epoch_time = int(time.time())
         self.file_name = None
 
+        self.directory_name = "Cell/"
+        import os
+        if not os.path.exists(self.directory_name):
+            os.mkdir(self.directory_name)
         self.hash_path()
         self.initialize_grid()
 
     def hash_path(self):
-        self.file_name = str(self.epoch_time) + "_" + str(self.columns) + "_" + str(self.rows) + ".json"
+        self.file_name = "Cell/" + str(self.epoch_time) + "_" + str(self.columns) + "_" + str(self.rows) + ".json"
 
     def generate_grid(self):
         # Ensuring that the cell objects exist

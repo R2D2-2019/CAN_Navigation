@@ -140,7 +140,7 @@ class TestGridInFile(unittest.TestCase):
 
         g = GridInFile(rows, cols)
 
-        epoch = str(g.epoch_time) + "_10_10.json"
+        epoch = "Cell/" + str(g.epoch_time) + "_10_10.json"
 
         self.assertEqual(g.file_name, epoch)
 
