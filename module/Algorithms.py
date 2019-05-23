@@ -129,13 +129,26 @@ class AStar(PathfindingAlgorithm):
                 self.l_index = i
 
     def iteration_start(self):
+        """
+        Function that's being called whenever an iteration of the run loop start.
+        This function is merely here for overriding by child.
+        """
         pass
 
     def iteration_end(self):
+        """
+        Function that's being called whenever an iteration of the run loop ends.
+        This function is merely here for overriding by child.
+        """
         pass
 
     def iteration_neighbours(self, neighbours):
+        """
+        Function that's being called whenever a cells neighbours are known.
+        This function is merely here for overriding by child.
+        """
         pass
+
 
     def run(self):
         """
