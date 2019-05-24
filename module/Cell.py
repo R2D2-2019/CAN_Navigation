@@ -73,7 +73,7 @@ class CellInMemory(Cell):
 
         """
         if self.get_x_y() != item.get_x_y():
-            self.previous = item
+            self.previous = item.get_x_y()
 
     def __getattr__(self, key):
         return object.__getattribute__(self, key)
@@ -87,11 +87,12 @@ class CellInMemory(Cell):
 
 
 def generate_file_name(x, y):
-    return str(x) + "_" + str(y) + ".json"
+    return "Cell/" + str(x) + "_" + str(y) + ".json"
 
 
 class CellInFile(CellInMemory):
     def __init__(self, x=0, y=0, f=0, g=0, h=0, read=False):
+        self.file_name = None
         CellInMemory.__init__(self, x, y, f, g, h)
         self.x = x
         self.y = y
@@ -107,16 +108,16 @@ class CellInFile(CellInMemory):
         Keep in mind that these variables will also be stored in the file.
         """
         self.__dict__[key] = value
+        if self.file_name:
+            self.set_file_content()
 
     def get_file_content(self):
         """ Getting the content from a file and storing it in the object.
         Afterwards removing the file_name, conserve memory and can be generated.
         """
-
         with open(generate_file_name(self.x, self.y), 'r') as f:
             for key, values in json.load(f).items():
                 setattr(self, key, values)
-        delattr(self, 'file_name')
 
     def set_file_content(self):
         """ Setting the content from a cell in file object.
