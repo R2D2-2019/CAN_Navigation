@@ -62,6 +62,7 @@ class AStar(PathfindingAlgorithm):
         self.end = end
         self.start = start
         self.path = []
+        self.current_cell = None
 
         self.l_index = 0
         # These lists are empty by default
@@ -127,6 +128,42 @@ class AStar(PathfindingAlgorithm):
             if self.open_set[i].f < self.open_set[self.l_index].f:
                 self.l_index = i
 
+    def iteration_start(self):
+        """
+        Function that's being called whenever an iteration of the run loop start.
+        This function is merely here for overriding by child.
+        """
+        pass
+
+    def iteration_end(self):
+        """
+        Function that's being called whenever an iteration of the run loop ends.
+        This function is merely here for overriding by child.
+        """
+        pass
+
+    def iteration_neighbours(self, neighbours):
+        """
+        Function that's being called whenever a cells neighbours are known.
+        This function is merely here for overriding by child.
+        """
+        pass
+
+    def iteration_path_found(self):
+        """
+        Function that's being called when a path has been found.
+        This function is merely here for overriding by child.
+        """
+        pass
+
+    def iteration_no_path_found(self):
+        """
+        Function that's being called when a path has been found.
+        This function is merely here for overriding by child.
+        """
+        pass
+
+
     def run(self):
         """
         The main implementation of the A* algorithm. Recommend reading the wiki pseudo-code to understand it.
@@ -135,11 +172,15 @@ class AStar(PathfindingAlgorithm):
         """
         while self.continuation_check():  # checking if we still have something to read from
             # We need to use the lowest available index to continue our search
+            self.iteration_start()
             self.get_lowest_index_open_set()
             if self.found_check():  # If we've found our goal, ready to finalize
-                return self.reconstruct_path()  # return with a path reconstruct function call
-            current_cell = self.open_set[self.l_index]
-            neighbours = self.grid.get_neighbours(current_cell)
+                self.reconstruct_path()
+                self.iteration_path_found()
+                return self.path   # return with a path reconstruct function call
+            self.current_cell = self.open_set[self.l_index]
+            neighbours = self.grid.get_neighbours(self.current_cell)
+            self.iteration_neighbours(neighbours)
             for cell in neighbours:
                 if self.is_accessible(cell):
                     temp_g = cell.g + 1
@@ -161,4 +202,6 @@ class AStar(PathfindingAlgorithm):
             self.closed_set.append(self.open_set[self.l_index])
             # ensuring that we don't come across the same element again
             del self.open_set[self.l_index]
+            self.iteration_end()
+        self.iteration_no_path_found()
         return False
