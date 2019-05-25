@@ -3,7 +3,7 @@
 
 
 from module.Cell import CellInMemory, CellInFile
-import time, json
+import time, json, numpy
 
 
 def cell_factory(x, y, f=0, g=0, h=0):
@@ -14,6 +14,28 @@ def cell_factory(x, y, f=0, g=0, h=0):
 
 
 class Grid:
+
+    def __init__(self, columns=0, rows=0):
+        self.columns = columns
+        self.rows = rows
+
+    def get_neighbours(self, cell):
+        pass
+
+    def get_neighbours_indexes(self, cell):
+        pass
+
+    def __getitem__(self, lst):
+        pass
+
+    def __setitem__(self, lst, value):
+        pass
+
+    def __str__(self):
+        pass
+
+
+class GridInNumpy:
 
     def __init__(self, columns=0, rows=0):
         self.columns = columns
