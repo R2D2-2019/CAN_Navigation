@@ -204,6 +204,7 @@ class GridInFile(GridInMemory):
         CellInFile(x, y, c.f, c.g, c.h, read=False)
 
     def remove_json_files(self):
+        """ Clears the directory that's been created to store the files """
         import shutil
         shutil.rmtree(self.directory_name)
 
