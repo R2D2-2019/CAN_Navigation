@@ -18,9 +18,16 @@ def grid_factory(columns=0, rows=0):
     # Trying if we can actually do it memory wise:
     import os
     import psutil
+    import importlib
 
     process = psutil.Process(os.getpid())
     available_bits = process.memory_info().rss * 8  # the amount of "free" memory we have for our process
+
+    # Numpy ISN'T a hard requirement, though it's nice to mention it DOES help.
+    numpy_loader = importlib.util.find_spec('numpy')
+
     if available_bits < calculate_potential_size(rows, columns):
+        if numpy_loader is not None:
+            return GridInNumpy(columns, rows)
         return GridInFile(columns, rows)
     return GridInMemory(columns, rows)
