@@ -229,5 +229,3 @@ class GridInFile(GridInMemory):
         pass
 
 
-def grid_factory(columns=0, rows=0):
-    return GridInMemory(columns, rows)
