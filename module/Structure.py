@@ -113,7 +113,7 @@ class GridInMemory(Grid):
 
 class GridInFile(GridInMemory):
 
-    def __init__(self, columns=0, rows=0):
+    def __init__(self, columns=0, rows=0, file_storage=None):
         # The InFile will create it's own file structure on a hard drive (in the module folder)
         # In Order to prevent collisions we'll be using the epoch time and the grid size to hash a path
         # While these will prevent MOSTLY prevent collisions, they aren't
@@ -123,6 +123,9 @@ class GridInFile(GridInMemory):
 
         self.epoch_time = int(time.time())
         self.file_name = None
+
+        # Used to operate the fileStorage object
+        self.file_storage = file_storage
 
         self.directory_name = "Cell/"
         import os
