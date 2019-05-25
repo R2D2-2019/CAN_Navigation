@@ -144,6 +144,35 @@ class TestGridInFile(unittest.TestCase):
 
         self.assertEqual(g.file_name, epoch)
 
+    def test_directory_clearer(self):
+        """ Testing if our hash method works as expected,
+        hashing can be made far more difficult so this will serve as a template.
+        """
+        rows = 10
+        cols = 10
+
+        g = GridInFile(rows, cols)
+
+        epoch = "Cell/" + str(g.epoch_time) + "_10_10.json"
+
+        self.assertEqual(g.file_name, epoch)
+
+        import os
+
+        present = False
+        if os.path.exists(g.directory_name):
+            present = True
+
+        self.assertEqual(True, present)
+
+        g.remove_json_files()
+
+        removed = False
+        if not os.path.exists(g.directory_name):
+            removed = True
+
+        self.assertEqual(True, removed)
+
 
 if __name__ == '__main__':
     unittest.main()
