@@ -2,7 +2,7 @@
 # (InMemory or InFile) with the limit Cell type
 
 
-from module.Cell import CellInMemory, CellInFile
+from modules.CAN_Navigation.module.Cell import CellInMemory, CellInFile
 import time, json
 
 
