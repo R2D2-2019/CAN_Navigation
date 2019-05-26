@@ -1,5 +1,6 @@
 import unittest
 from module.Structure import CellInFile
+from module.FileStorage import FileStorage
 
 
 class TestCellInFile(unittest.TestCase):
@@ -16,7 +17,7 @@ class TestCellInFile(unittest.TestCase):
         """
         Testing if default constructor works with the default parameters
         """
-        cell = CellInFile(190, 190)
+        cell = CellInFile(FileStorage(), 190, 190)
         self.assertEqual(0, cell.f)
         self.assertEqual(0, cell.g)
         self.assertEqual(0, cell.h)
@@ -25,7 +26,7 @@ class TestCellInFile(unittest.TestCase):
         """
         Testing if the default constructor filling does what is expected
         """
-        cell = CellInFile(0, 0, 1, 2, 3)
+        cell = CellInFile(FileStorage(), 0, 0, 1, 2, 3)
         self.assertEqual(1, cell.f)
         self.assertEqual(2, cell.g)
         self.assertEqual(3, cell.h)
@@ -34,21 +35,21 @@ class TestCellInFile(unittest.TestCase):
         """
         Testing if the neighbour for the [limit][limit] index position is working as expected
         """
-        cell = CellInFile(0, 0)
+        cell = CellInFile(FileStorage(), 0, 0)
         self.assertEqual([0, 0], cell.get_x_y())
 
     def test_get_accessible_default(self):
         """
         Testing if the default value is as expected
         """
-        cell = CellInFile(0, 0)
+        cell = CellInFile(FileStorage(), 0, 0)
         self.assertEqual(True, cell.accessible)
 
     def test_get_accessible_false(self):
         """
         Testing if the accessible value has been updated accordingly (negative)
         """
-        cell = CellInFile(0, 0)
+        cell = CellInFile(FileStorage(), 0, 0)
         cell.accessible = False
         self.assertEqual(False, cell.accessible)
 
@@ -57,7 +58,7 @@ class TestCellInFile(unittest.TestCase):
         MIGHT SEEM USELESS NOW, BUT WON'T BE IN THE FUTURE.
         Testing if the accessible value has been updated accordingly (positive)
         """
-        cell = CellInFile(0, 0)
+        cell = CellInFile(FileStorage(), 0, 0)
         cell.accessible = True
         self.assertEqual(True, cell.accessible)
 
@@ -65,8 +66,8 @@ class TestCellInFile(unittest.TestCase):
         """
         Testing if the adding a correct cell is storing it in the previous variable of a cell
         """
-        cell = CellInFile(0, 0)
-        cell_previous = CellInFile(0, 1)
+        cell = CellInFile(FileStorage(), 0, 0)
+        cell_previous = CellInFile(FileStorage(), 0, 1)
         cell.set_previous(cell_previous)
 
         self.assertEqual(cell_previous.get_x_y(), cell.previous)
@@ -75,8 +76,8 @@ class TestCellInFile(unittest.TestCase):
         """
         Testing if adding a duplicate to the previous value prevents it from being set
         """
-        cell = CellInFile(0, 0)
-        cell_previous = CellInFile(0, 0)
+        cell = CellInFile(FileStorage(), 0, 0)
+        cell_previous = CellInFile(FileStorage(), 0, 0)
         cell.set_previous(cell_previous)
 
         self.assertEqual(None, cell.previous)
@@ -85,10 +86,10 @@ class TestCellInFile(unittest.TestCase):
         """
         Testing if the file contains the expected json string
         """
-        cell = CellInFile(0, 0)
+        cell = CellInFile(FileStorage("Cell"), 0, 0)
         expected_json = '{"file_name": "0_0.json", "f": 0, "g": 0, "h": 0, "x": 0, "y": 0, "neighbours": [], "previous": null, "accessible": true}'
         actual_json = ""
-        with open(cell.file_name, 'r') as f:
+        with open("Cell/" + cell.file_name, 'r') as f:
             actual_json = f.readline()
         self.assertEqual(expected_json, actual_json)
 
@@ -96,11 +97,11 @@ class TestCellInFile(unittest.TestCase):
         """
         Testing if the addition of an existing field works as expected
         """
-        cell = CellInFile(0, 0)
+        cell = CellInFile(FileStorage(), 0, 0)
         cell.neighbours = ["test"]
         cell.set_file_content()
         del cell
-        cell_reopen = CellInFile(0, 0, read=True)
+        cell_reopen = CellInFile(FileStorage(), 0, 0, read=True)
 
         self.assertEqual(["test"], cell_reopen.neighbours)
 
@@ -108,11 +109,11 @@ class TestCellInFile(unittest.TestCase):
         """
         Testing if the addition of a unspecified (a.k.a a new cell) field works as expected
         """
-        cell = CellInFile(0, 0)
+        cell = CellInFile(FileStorage(), 0, 0)
         cell.test_file = "test"
         cell.set_file_content()
         del cell
-        cell_reopen = CellInFile(0, 0, read=True)
+        cell_reopen = CellInFile(FileStorage(), 0, 0, read=True)
 
         self.assertEqual("test", cell_reopen.test_file)
 
