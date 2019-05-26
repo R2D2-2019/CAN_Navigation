@@ -122,7 +122,7 @@ class GridInFile(GridInMemory):
         GridInMemory.__init__(self, columns, rows)
         self.grid = list()
         self.file_name = ""  # Defining in the constructor because attributes need to declared in the init
-        g
+
         self.hash_file_name()
 
         # Instantiating a new FileStorage if we aren't supplied one.
