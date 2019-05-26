@@ -73,7 +73,7 @@ class CellInMemory(Cell):
 
         """
         if self.get_x_y() != item.get_x_y():
-            self.previous = item.get_x_y()
+            self.previous = item
 
     def __getattr__(self, key):
         return object.__getattribute__(self, key)
