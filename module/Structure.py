@@ -143,7 +143,8 @@ class GridInFile(GridInMemory):
         # Ensuring that the cell objects exist
         for i in range(0, self.columns):
             for j in range(0, self.rows):
-                CellInFile(self.file_storage, i, j)  # We don't need to store them, because we can just rebuild them when we need them
+                CellInFile(self.file_storage, i, j)  # We don't need to store them,
+                # because we can just rebuild them when we need them
 
         for i in range(0, self.columns):
             for j in range(0, self.rows):
