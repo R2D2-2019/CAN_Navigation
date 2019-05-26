@@ -3,6 +3,7 @@
 
 
 from module.Cell import CellInMemory, CellInFile
+from module.FileStorage import FileStorage
 import time, json
 
 
@@ -127,15 +128,17 @@ class GridInFile(GridInMemory):
         # Used to operate the fileStorage object
         self.file_storage = file_storage
 
-        self.directory_name = "Cell/"
         import os
-        if not os.path.exists(self.directory_name):
-            os.mkdir(self.directory_name)
-        self.hash_path()
+
+        while not os.path.exists(self.directory_name):
+            self.hash_path()
+        os.mkdir(self.directory_name)
+
+        self.file_storage = FileStorage(self.directory_name)
         self.initialize_grid()
 
     def hash_path(self):
-        self.file_name = "Cell/" + str(self.epoch_time) + "_" + str(self.columns) + "_" + str(self.rows) + ".json"
+        self.file_name = str(self.epoch_time) + "_" + str(self.columns) + "_" + str(self.rows) + ".json"
 
     def generate_grid(self):
         # Ensuring that the cell objects exist
@@ -165,17 +168,14 @@ class GridInFile(GridInMemory):
     def get_file_content(self):
         """ Getting the content from a file and storing it in the object.
         """
-        with open(self.file_name, 'r') as f:
-            for key, values in json.load(f).items():
-                setattr(self, key, values)
+        self.file_storage.get_file_content(self)
 
     def set_file_content(self):
         """ Setting the content from a grid file in file object.
         Using the native json.dump function to store it in a JSON string.
         Uses the __dict__ call to store ALL object attributes
         """
-        with open(self.file_name, 'w') as f:
-            json.dump(self.__dict__, f)
+        self.file_storage.set_file_content(self)
         self.grid = None
 
     def get_grid(self):

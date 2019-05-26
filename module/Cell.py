@@ -1,3 +1,4 @@
+from module.FileStorage import FileStorage
 import json
 
 
@@ -87,15 +88,16 @@ class CellInMemory(Cell):
 
 
 def generate_file_name(x, y):
-    return "Cell/" + str(x) + "_" + str(y) + ".json"
+    return  + str(x) + "_" + str(y) + ".json"
 
 
 class CellInFile(CellInMemory):
-    def __init__(self, x=0, y=0, f=0, g=0, h=0, read=False):
+    def __init__(self, file_storage, x=0, y=0, f=0, g=0, h=0, read=False):
         self.file_name = None
         CellInMemory.__init__(self, x, y, f, g, h)
         self.x = x
         self.y = y
+        self.file_storage = file_storage
         if read:
             self.get_file_content()
         else:
@@ -115,17 +117,14 @@ class CellInFile(CellInMemory):
         """ Getting the content from a file and storing it in the object.
         Afterwards removing the file_name, conserve memory and can be generated.
         """
-        with open(generate_file_name(self.x, self.y), 'r') as f:
-            for key, values in json.load(f).items():
-                setattr(self, key, values)
+        self.file_storage.get_file_content(self)
 
     def set_file_content(self):
         """ Setting the content from a cell in file object.
         Using the native json.dump function to store it in a JSON string.
         Uses the __dict__ call to store ALL object attributes
         """
-        with open(generate_file_name(self.x, self.y), 'w') as f:
-            json.dump(self.__dict__, f)
+        self.file_storage.set_file_content(self)
 
     def __delete__(self, instance):
         self.set_file_content()
