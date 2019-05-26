@@ -143,7 +143,7 @@ class GridInFile(GridInMemory):
         # Ensuring that the cell objects exist
         for i in range(0, self.columns):
             for j in range(0, self.rows):
-                CellInFile(i, j)  # We don't need to store them, because we can just rebuild them when we need them
+                CellInFile(self.file_storage, i, j)  # We don't need to store them, because we can just rebuild them when we need them
 
         for i in range(0, self.columns):
             for j in range(0, self.rows):
@@ -197,13 +197,13 @@ class GridInFile(GridInMemory):
     def __getitem__(self, coordinates):
         (x, y) = coordinates
         if self.in_grid(x, y):
-            return CellInFile(x, y, read=True)
+            return CellInFile(self.file_storage, x, y, read=True)
         return False
 
     def __setitem__(self, lst, value):
         (x, y) = lst
-        c = CellInFile(x, y, read=True)
-        CellInFile(x, y, c.f, c.g, c.h, read=False)
+        c = CellInFile(self.file_storage, x, y, read=True)
+        CellInFile(self.file_storage,x, y, c.f, c.g, c.h, read=False)
 
     def remove_json_files(self):
         self.file_storage.delete_folder()
