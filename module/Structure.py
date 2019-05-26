@@ -121,24 +121,23 @@ class GridInFile(GridInMemory):
         # immune to it.
         GridInMemory.__init__(self, columns, rows)
         self.grid = list()
-
+        self.file_name = ""  # Defining in the constructor because attributes need to declared in the init
         self.epoch_time = int(time.time())
-        self.file_name = None
+        self.hash_file_name()
 
-        # Used to operate the fileStorage object
-        self.file_storage = file_storage
+        # Instantiating a new FileStorage if we aren't supplied one.
+        if not file_storage:
+            self.file_storage = FileStorage()
+        else:
+            self.file_storage = file_storage
 
-        import os
-
-        while not os.path.exists(self.directory_name):
-            self.hash_path()
-        os.mkdir(self.directory_name)
-
-        self.file_storage = FileStorage(self.directory_name)
         self.initialize_grid()
 
-    def hash_path(self):
-        self.file_name = str(self.epoch_time) + "_" + str(self.columns) + "_" + str(self.rows) + ".json"
+    def hash_file_name(self):
+        """ Getting the file_name
+        Stored in a separate function call, because it might become a limitation to store only a single grid.json
+        """
+        self.file_name = "grid.json"
 
     def generate_grid(self):
         # Ensuring that the cell objects exist
@@ -207,9 +206,7 @@ class GridInFile(GridInMemory):
         CellInFile(x, y, c.f, c.g, c.h, read=False)
 
     def remove_json_files(self):
-        """ Clears the directory that's been created to store the files """
-        import shutil
-        shutil.rmtree(self.directory_name)
+        self.file_storage.delete_folder()
 
     def __str__(self):
         pass
