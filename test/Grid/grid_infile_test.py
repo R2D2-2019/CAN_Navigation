@@ -33,15 +33,15 @@ class TestGridInFile(unittest.TestCase):
 
         for x in range(rows - 1):
             for y in range(cols - 1):
-                g[(x, y)].accessible = z[x][y]
+                g[(x, y)].set_accessible(z[x][y])
 
-        h = list()
+        found = False
         for x in range(rows - 1):
             for y in range(cols - 1):
-                h[x][y] = g[(x, y)]
+                if g[(x, y)].accessible is not z[x][y]:
+                    found = True
 
-        self.assertEqual(h, z)
-        g.file_storage.delete_folder()
+        self.assertEqual(False, found)
 
     def test_accessibility_random_access_GridInFile(self):
         """ Testing if the accessibility setting is working accordingly on a random location """
@@ -69,8 +69,6 @@ class TestGridInFile(unittest.TestCase):
         self.assertEqual(g[(int(rows / 2), int(cols / 2))
                          ].accessible, z[int(rows / 2)][int(cols / 2)])
 
-        g.file_storage.delete_folder()
-
     def test_neighbour_zero_zero_GridInFile(self):
         """ Testing if the neighbour for the [0][0] index position is working as expected """
         rows = 10
@@ -83,7 +81,6 @@ class TestGridInFile(unittest.TestCase):
         ls = [[1, 0], [0, 1], [1, 1]]
 
         self.assertEqual(g.get_neighbours(uid), ls)
-        g.file_storage.delete_folder()
 
     def test_neighbour_limit_limit_GridInFile(self):
         """
