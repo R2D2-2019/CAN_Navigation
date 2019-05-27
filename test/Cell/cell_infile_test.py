@@ -97,11 +97,14 @@ class TestCellInFile(unittest.TestCase):
         """
         Testing if the addition of an existing field works as expected
         """
-        cell = CellInFile(FileStorage(), 0, 0)
+
+        fs = FileStorage()
+
+        cell = CellInFile(fs, 0, 0)
         cell.neighbours = ["test"]
         cell.set_file_content()
         del cell
-        cell_reopen = CellInFile(FileStorage(), 0, 0, read=True)
+        cell_reopen = CellInFile(fs, 0, 0, read=True)
 
         self.assertEqual(["test"], cell_reopen.neighbours)
 
