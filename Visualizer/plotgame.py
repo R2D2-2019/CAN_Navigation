@@ -1,44 +1,36 @@
 from pipper import install_packages
 install_packages(['pygame', 'euclid3'])
-
-import pygame as pg
-import euclid3 as vmath
-
-from modules.CAN_Navigation.module.Structure import grid_factory
-from modules.CAN_Navigation.module.Algorithms import AStar
 from square import Square
+from modules.CAN_Navigation.module.Algorithms import AStar
+from modules.CAN_Navigation.module.Structure import grid_factory
+import euclid3 as vmath
+import pygame as pg
 
-def input_to_list_of_ints(string: str, delimiter: chr):
-    """
-    Converts input to a list of strings
-    :param string: String of characters to print to the user
-    :param delimiter: Character that determines when to slice
-    """
-    input_string = input(string)
-    return list(map(int, input_string.split(delimiter)))
+
+GRID_SIZE = 50
+
 
 def main():
-    grid_size = (50, 50)
-    grid = grid_factory(grid_size[0], grid_size[1])
-    path = None
-    start = None
-    end = None
+    # grid size is fixed , tried 200x200 but it's really slow
+    grid = grid_factory(GRID_SIZE, GRID_SIZE)
+    algo = AStar(grid)
 
+    # init pygame and open a white window thats 1000x1000 res
     pg.init()
-
     width, height = 1000, 1000
     display = pg.display.set_mode((width, height), 0, 32)
     display.fill((240, 240, 240))
 
-    block_w, block_h = width/grid_size[0], height/grid_size[1]
+    # determine how big the blocks need to be
+    block_w, block_h = width/grid.rows, height/grid.columns
 
+    # fill blocks (2D list of lists)
     blocks = list()
-    start_index = None
-    end_index = None
-    for x in range(0, width, int(block_w)):
-        for y in range(0, height, int(block_h)):
+    for x in range(0, width+1, int(block_w)):
+        blocks.append(list())
+        for y in range(0, height+1, int(block_h)):
             b = Square(vmath.Vector2(x, y), vmath.Vector2(block_w, block_h))
-            blocks.append(b)
+            blocks[-1].append(b)
 
     # poll events
     while True:
@@ -49,49 +41,63 @@ def main():
             # if we press m1 we check what block the cursor is on and mark it as an obstacle
             if pg.mouse.get_pressed()[0]:
                 mouse_pos = pg.mouse.get_pos()
-                for block in blocks:
-                    if block.body.collidepoint(mouse_pos):
-                        block.mark_obstacle()
-             
+                for row in blocks:
+                    for block in row:
+                        if block.body.collidepoint(mouse_pos):
+                            block.mark_obstacle()
+
             if event.type == pg.KEYDOWN:
                 mouse_pos = pg.mouse.get_pos()
-                if event.key == pg.K_s and start_index == None:
-                    for index, block in enumerate(blocks):
-                        if block.body.collidepoint(mouse_pos):
-                            start_index = index
-                            block.mark_start()
-
-                if event.key == pg.K_e and end_index == None:
-                    for index, block in enumerate(blocks):
-                        if block.body.collidepoint(mouse_pos):
-                            end_index = index
-                            block.mark_end()
-
+                # if we press s for the first time we check on which block the mouse is set it as start
+                if event.key == pg.K_s and not algo.start:
+                    for y, row in enumerate(blocks):
+                        for x, block in enumerate(row):
+                            if block.body.collidepoint(mouse_pos):
+                                algo.start = grid[(x, y)]
+                                block.mark_start()
+                # if we press e for the first time we check on which block the mouse is and set is as end
+                if event.key == pg.K_e and not algo.end:
+                    for y, row in enumerate(blocks):
+                        for x, block in enumerate(row):
+                            if block.body.collidepoint(mouse_pos):
+                                algo.end = grid[(x, y)]
+                                block.mark_end()
+                # if we press space for the first time we mark all obstacle blocks als inaccessible in our grid
                 if event.key == pg.K_SPACE:
-                    if path == None:
+                    if not algo.path:
+                        if not algo.start or not algo.end:
+                            continue
+
                         for x in range(grid.rows):
                             for y in range(grid.columns):
-                                if blocks[x + (grid.columns*y)].obstacle:
+                                if blocks[y][x].obstacle:
                                     grid[(x, y)].accessible = False
-                                    
-                        start = grid[(int(start_index / grid.rows), int(start_index % grid.columns))]
-                        end = grid[(int(end_index / grid.rows), int(end_index % grid.columns))]
-                        algo = AStar(grid, start, end)
-                        path = algo.solve()
-                        print(path)
-                        path.pop()
-                        for v2 in path:
-                            blocks[v2[0] + (grid.rows * v2[1])].set_color((0, 255, 255))
 
+                        # calculate a path
+                        algo.solve()
+
+                        # remove start(twice) and end node from the path
+                        algo.path.pop()
+                        algo.path.pop(0)
+                        algo.path.pop(0)
+
+                        # color the path yellow
+                        for v2 in algo.path:
+                            blocks[v2[1]][v2[0]].set_color((0, 255, 255))
+
+                # if we press c we clear all variables and reset the grid and blocks
                 if event.key == pg.K_c:
-                    path, start, end, end_index, start_index = None, None, None, None, None
-                    grid = grid_factory(grid_size[0], grid_size[1])
-                    for block in blocks:
-                        block.reset()
+                    grid = grid_factory(GRID_SIZE, GRID_SIZE)
+                    algo = AStar(grid)
+                    for row in blocks:
+                        for block in row:
+                            block.reset()
 
-
-            for block in blocks:
-                block.draw(display)
+            # block draw calls and pygame updates
+            for row in blocks:
+                for block in row:
+                    block.draw(display)
             pg.display.update()
+
 
 main()
