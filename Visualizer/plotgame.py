@@ -1,6 +1,6 @@
 from pipper import install_packages
 install_packages(['pygame', 'euclid3'])
-from square import Square
+from rectangle import Rectangle
 from modules.CAN_Navigation.module.Algorithms import AStar
 from modules.CAN_Navigation.module.Structure import grid_factory
 import euclid3 as vmath
@@ -29,7 +29,7 @@ def main():
     for x in range(0, width+1, int(block_w)):
         blocks.append(list())
         for y in range(0, height+1, int(block_h)):
-            b = Square(vmath.Vector2(x, y), vmath.Vector2(block_w, block_h))
+            b = Rectangle(vmath.Vector2(x, y), vmath.Vector2(block_w, block_h))
             blocks[-1].append(b)
 
     # poll events

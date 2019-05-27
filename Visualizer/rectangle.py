@@ -14,7 +14,7 @@ class Drawable:
     def draw(self, window):
         pass
 
-class Square(Drawable):
+class Rectangle(Drawable):
     """
     Square shape used in our AStar visualization. Provides an easy way to draw a rectangle shape using pygame.
     Uses the euclid3 module for vector2.
