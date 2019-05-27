@@ -156,6 +156,9 @@ class GridInFile(GridInMemory):
 
     def get_neighbours(self, cell):
         self.get_grid()
+
+        # TODO:Catch the output of x_y too.
+
         neighbour_index = self.get_neighbours_indexes(cell)  # Redirecting the call to the super.
         neighbours = list()
         # TODO: Solve indexes that are empty arrays

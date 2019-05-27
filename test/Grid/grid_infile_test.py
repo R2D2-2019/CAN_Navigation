@@ -35,13 +35,12 @@ class TestGridInFile(unittest.TestCase):
             for y in range(cols - 1):
                 g[(x, y)].accessible = z[x][y]
 
-        found = False
+        h = list()
         for x in range(rows - 1):
             for y in range(cols - 1):
-                if g[(x, y)].accessible is not z[x][y]:
-                    found = True
+                 h[x][y] = g[(x, y)]
 
-        self.assertEqual(False, found)
+        self.assertEqual(h, z)
         g.file_storage.delete_folder()
 
     def test_accessibility_random_access_GridInFile(self):
@@ -97,7 +96,7 @@ class TestGridInFile(unittest.TestCase):
 
         uid = g[(9, 9)]
 
-        ls = [[rows - 2, cols - 1], [rows - 1, cols - 1], [rows - 2, cols - 2]]
+        ls = [[rows - 2, cols - 1], [rows - 1, cols - 2], [rows - 2, cols - 2]]
 
         self.assertEqual(g.get_neighbours(uid), ls)
         g.file_storage.delete_folder()
