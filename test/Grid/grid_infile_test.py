@@ -42,6 +42,7 @@ class TestGridInFile(unittest.TestCase):
                     found = True
 
         self.assertEqual(False, found)
+        g.file_storage.delete_folder()
 
     def test_accessibility_random_access_GridInFile(self):
         """ Testing if the accessibility setting is working accordingly on a random location """
@@ -68,6 +69,7 @@ class TestGridInFile(unittest.TestCase):
 
         self.assertEqual(g[(int(rows / 2), int(cols / 2))
                          ].accessible, z[int(rows / 2)][int(cols / 2)])
+        g.file_storage.delete_folder()
 
     def test_neighbour_zero_zero_GridInFile(self):
         """ Testing if the neighbour for the [0][0] index position is working as expected """
@@ -81,6 +83,8 @@ class TestGridInFile(unittest.TestCase):
         ls = [[1, 0], [0, 1], [1, 1]]
 
         self.assertEqual(g.get_neighbours(uid), ls)
+
+        g.file_storage.delete_folder()
 
     def test_neighbour_limit_limit_GridInFile(self):
         """
