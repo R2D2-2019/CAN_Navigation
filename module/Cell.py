@@ -126,6 +126,20 @@ class CellInFile(CellInMemory):
         """
         self.__dict__[key] = value
 
+    def set_previous(self, item):
+        """ Setting the previous Cell.
+        Detects if the item points to itself.
+
+
+        item (obj): Cell like object that has get_x_y function.
+
+        """
+        if self.get_x_y() != item.get_x_y():
+            self.previous = [item.get_x_y()] + item.get_previous()
+
+    def get_previous(self):
+        return [self.previous]
+
     def get_file_content(self):
         """ Getting the content from a file and storing it in the object.
         Afterwards removing the file_name, conserve memory and can be generated.
