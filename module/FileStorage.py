@@ -49,7 +49,6 @@ class FileStorage:
         Using the native json.dump function to store it in a JSON string.
         Uses the __dict__ call to store ALL object attributes
         """
-        print(self.path(instance))
         with open(self.path(instance), 'w') as f:
             json.dump(self.clean_instance(instance), f)
 
