@@ -86,10 +86,10 @@ class TestCellInFile(unittest.TestCase):
         """
         Testing if the file contains the expected json string
         """
-        cell = CellInFile(FileStorage("Cell"), 0, 0)
+        cell = CellInFile(FileStorage(), 0, 0)
         expected_json = '{"file_name": "0_0.json", "f": 0, "g": 0, "h": 0, "x": 0, "y": 0, "neighbours": [], "previous": null, "accessible": true}'
         actual_json = ""
-        with open("Cell/" + cell.file_name, 'r') as f:
+        with open(cell.file_storage.path(cell), 'r') as f:
             actual_json = f.readline()
         self.assertEqual(expected_json, actual_json)
 
