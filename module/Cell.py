@@ -13,17 +13,29 @@ class Cell:
     def __getattr__(self, item):
         pass
 
+
+class AstarCell(Cell):
+    def __init__(
+            self,
+            x,
+            y,
+            f=0,
+            g=0,
+            h=0,
+    ):
+        pass
+
     def get_x_y(self):
         pass
 
-    def get_neighbours(self):
+    def set_accessibility(self, state):
         pass
 
     def set_previous(self, item):
         pass
 
 
-class CellInMemory(Cell):
+class CellInMemory(AstarCell):
     """ InMemory storage for a Cell
     Inherits from the Abstract Cell class.
     """
@@ -78,6 +90,9 @@ class CellInMemory(Cell):
 
     def __getattr__(self, key):
         return object.__getattribute__(self, key)
+
+    def set_accessibility(self, state):
+        self.accessible = state
 
     def get_x_y(self):
         """ Getting the  Cell X and Y coordinates.

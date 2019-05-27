@@ -38,7 +38,7 @@ class TestGridInFile(unittest.TestCase):
         h = list()
         for x in range(rows - 1):
             for y in range(cols - 1):
-                 h[x][y] = g[(x, y)]
+                h[x][y] = g[(x, y)]
 
         self.assertEqual(h, z)
         g.file_storage.delete_folder()
