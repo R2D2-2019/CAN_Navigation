@@ -140,9 +140,9 @@ class TestGridInFile(unittest.TestCase):
 
         g = GridInFile(rows, cols)
 
-        epoch = "Cell/" + str(g.epoch_time) + "_10_10.json"
+        file_name = "grid.json"
 
-        self.assertEqual(g.file_name, epoch)
+        self.assertEqual(file_name, g.file_name)
 
     def test_directory_clearer(self):
         """ Testing if our hash method works as expected,
