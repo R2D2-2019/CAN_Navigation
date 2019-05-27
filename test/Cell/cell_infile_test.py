@@ -21,6 +21,7 @@ class TestCellInFile(unittest.TestCase):
         self.assertEqual(0, cell.f)
         self.assertEqual(0, cell.g)
         self.assertEqual(0, cell.h)
+        cell.file_storage.delete_folder()
 
     def test_default_constructor_filled(self):
         """
@@ -30,6 +31,7 @@ class TestCellInFile(unittest.TestCase):
         self.assertEqual(1, cell.f)
         self.assertEqual(2, cell.g)
         self.assertEqual(3, cell.h)
+        cell.file_storage.delete_folder()
 
     def test_get_x_y(self):
         """
@@ -38,12 +40,15 @@ class TestCellInFile(unittest.TestCase):
         cell = CellInFile(FileStorage(), 0, 0)
         self.assertEqual([0, 0], cell.get_x_y())
 
+        cell.file_storage.delete_folder()
+
     def test_get_accessible_default(self):
         """
         Testing if the default value is as expected
         """
         cell = CellInFile(FileStorage(), 0, 0)
         self.assertEqual(True, cell.accessible)
+        cell.file_storage.delete_folder()
 
     def test_get_accessible_false(self):
         """
@@ -52,6 +57,7 @@ class TestCellInFile(unittest.TestCase):
         cell = CellInFile(FileStorage(), 0, 0)
         cell.accessible = False
         self.assertEqual(False, cell.accessible)
+        cell.file_storage.delete_folder()
 
     def test_get_accessible_accessed(self):
         """
@@ -61,6 +67,7 @@ class TestCellInFile(unittest.TestCase):
         cell = CellInFile(FileStorage(), 0, 0)
         cell.accessible = True
         self.assertEqual(True, cell.accessible)
+        cell.file_storage.delete_folder()
 
     def test_previous_cell_correct(self):
         """
@@ -71,6 +78,8 @@ class TestCellInFile(unittest.TestCase):
         cell.set_previous(cell_previous)
 
         self.assertEqual(cell_previous.get_x_y(), cell.previous)
+        cell.file_storage.delete_folder()
+        cell_previous.file_storage.delete_folder()
 
     def test_previous_cell_duplicate(self):
         """
@@ -81,6 +90,8 @@ class TestCellInFile(unittest.TestCase):
         cell.set_previous(cell_previous)
 
         self.assertEqual(None, cell.previous)
+        cell.file_storage.delete_folder()
+        cell_previous.file_storage.delete_folder()
 
     def test_cell_storage(self):
         """
@@ -92,6 +103,8 @@ class TestCellInFile(unittest.TestCase):
         with open(cell.file_storage.path(cell), 'r') as f:
             actual_json = f.readline()
         self.assertEqual(expected_json, actual_json)
+
+        cell.file_storage.delete_folder()
 
     def test_cell_validating_read_data(self):
         """
@@ -107,18 +120,21 @@ class TestCellInFile(unittest.TestCase):
         cell_reopen = CellInFile(fs, 0, 0, read=True)
 
         self.assertEqual(["test"], cell_reopen.neighbours)
+        fs.delete_folder()
 
     def test_cell_validating_new_read_data(self):
         """
         Testing if the addition of a unspecified (a.k.a a new cell) field works as expected
         """
-        cell = CellInFile(FileStorage(), 0, 0)
+        fs = FileStorage()
+        cell = CellInFile(fs, 0, 0)
         cell.test_file = "test"
         cell.set_file_content()
         del cell
-        cell_reopen = CellInFile(FileStorage(), 0, 0, read=True)
+        cell_reopen = CellInFile(fs, 0, 0, read=True)
 
         self.assertEqual("test", cell_reopen.test_file)
+        fs.delete_folder()
 
 
 if __name__ == '__main__':
