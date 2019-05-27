@@ -3,7 +3,6 @@
 
 from modules.CAN_Navigation.module.FileStorage import FileStorage
 from modules.CAN_Navigation.module.Cell import CellInMemory, CellInFile
-import time, json
 
 
 def cell_factory(x, y, f=0, g=0, h=0):
@@ -166,7 +165,7 @@ class GridInFile(GridInMemory):
             neighbours.append(CellInFile(self.file_storage, x, y, read=True))
         return neighbours
 
-    # TODO: Perhaps the set and get functions from the structure and cell should be static.
+    # TODO: Perhaps the set and get functions from the structure    and cell should be static.
     def get_file_content(self):
         """ Getting the content from a file and storing it in the object.
         """
