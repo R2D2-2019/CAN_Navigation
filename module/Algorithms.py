@@ -106,7 +106,6 @@ class AStar(PathfindingAlgorithm):
         while hasattr(temp, 'previous'):
             self.path.append(temp.get_x_y())
             temp = temp.previous
-        self.path.append(self.start.get_x_y())
         self.path.reverse()
         return self.path
 
