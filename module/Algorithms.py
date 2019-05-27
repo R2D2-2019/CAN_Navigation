@@ -162,7 +162,6 @@ class AStar(PathfindingAlgorithm):
         """
         pass
 
-
     def run(self):
         """
         The main implementation of the A* algorithm. Recommend reading the wiki pseudo-code to understand it.
@@ -176,27 +175,25 @@ class AStar(PathfindingAlgorithm):
             if self.found_check():  # If we've found our goal, ready to finalize
                 self.reconstruct_path()
                 self.iteration_path_found()
-                return self.path   # return with a path reconstruct function call
+                return self.path  # return with a path reconstruct function call
             self.current_cell = self.open_set[self.l_index]
             neighbours = self.grid.get_neighbours(self.current_cell)
             self.iteration_neighbours(neighbours)
             for cell in neighbours:
                 if self.is_accessible(cell):
                     temp_g = cell.g + 1
-                    new_path = False
+
                     if cell in self.open_set:
                         if temp_g < cell.g:
                             cell.g = temp_g
-                            new_path = True
                     else:
                         cell.g = temp_g
-                        new_path = True
 
                         self.open_set.append(cell)
-                    if new_path:
-                        cell.h = calculate_heuristic(cell, self.end)
-                        cell.f = cell.g + cell.h
-                        cell.set_previous(self.open_set[self.l_index])
+
+                    cell.h = calculate_heuristic(cell, self.end)
+                    cell.f = cell.g + cell.h
+                    cell.set_previous(self.open_set[self.l_index])
 
             self.closed_set.append(self.open_set[self.l_index])
             # ensuring that we don't come across the same element again
