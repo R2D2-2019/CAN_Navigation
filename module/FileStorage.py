@@ -42,7 +42,7 @@ class FileStorage:
         cleaned_entry = dict()
 
         for k, v in entry.items():
-            if not isinstance(v, FileStorage):
+            if not isinstance(v, self.forbidden_instances):
                 cleaned_entry[k] = v
         return cleaned_entry
 
