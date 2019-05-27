@@ -13,7 +13,7 @@ class TestAlgorithmAstar(unittest.TestCase):
         g = grid_factory(rows, cols)
         start = g[(0, 0)]
         end = g[(cols - 1, rows - 1)]
-        a_star = AStar(g, end, start)
+        a_star = AStar(g, start, end)
 
         self.assertEqual(g, a_star.grid)
 
@@ -25,9 +25,9 @@ class TestAlgorithmAstar(unittest.TestCase):
         g = grid_factory(rows, cols)
         start = g[(0, 0)]
         end = g[(cols - 1, rows - 1)]
-        a_star = AStar(g, end, start)
+        a_star = AStar(g, start, end)
 
-        self.assertEqual(start, a_star.start)
+        self.assertEqual(start.get_x_y(), a_star.start.get_x_y())
 
     def test_grid_end_access(self):
         """ Testing if the astar end location is stored accordingly """
