@@ -110,8 +110,6 @@ class CellInFile(CellInMemory):
         Keep in mind that these variables will also be stored in the file.
         """
         self.__dict__[key] = value
-        if self.file_name:
-            self.set_file_content()
 
     def get_file_content(self):
         """ Getting the content from a file and storing it in the object.
