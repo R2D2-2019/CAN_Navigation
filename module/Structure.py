@@ -204,7 +204,7 @@ class GridInFile(GridInMemory):
     def __setitem__(self, lst, value):
         (x, y) = lst
         c = CellInFile(self.file_storage, x, y, read=True)
-        CellInFile(self.file_storage,x, y, c.f, c.g, c.h, read=False)
+        CellInFile(self.file_storage, x, y, c.f, c.g, c.h, read=False)
 
     def remove_json_files(self):
         self.file_storage.delete_folder()
