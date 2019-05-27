@@ -1,9 +1,8 @@
 # TODO: must contain a memory check, must return the constructed grid type
 # (InMemory or InFile) with the limit Cell type
 
-
-from module.Cell import CellInMemory, CellInFile
-from module.FileStorage import FileStorage
+from modules.CAN_Navigation.module.FileStorage import FileStorage
+from modules.CAN_Navigation.module.Cell import CellInMemory, CellInFile
 import time, json
 
 
