@@ -28,7 +28,7 @@ class AstarCell(Cell):
     def get_x_y(self):
         pass
 
-    def set_accessibility(self, state):
+    def set_accessible(self, state):
         pass
 
     def set_previous(self, item):
@@ -91,7 +91,7 @@ class CellInMemory(AstarCell):
     def __getattr__(self, key):
         return object.__getattribute__(self, key)
 
-    def set_accessibility(self, state):
+    def set_accessible(self, state):
         self.accessible = state
 
     def get_x_y(self):
@@ -138,6 +138,10 @@ class CellInFile(CellInMemory):
         Uses the __dict__ call to store ALL object attributes
         """
         self.file_storage.set_file_content(self)
+
+    def set_accessible(self, state):
+        self.accessible = state
+        self.set_file_content()
 
     def __delete__(self, instance):
         self.set_file_content()
