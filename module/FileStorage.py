@@ -3,8 +3,9 @@ import random
 import string
 import os
 
+
 class FileStorage:
-    def __init__(self, directory_name=None):
+    def __init__(self, directory_name=None, forbidden_instances=()):
         self.directory_name = directory_name
         if directory_name is None:
             self.generate_directory_name()
@@ -12,6 +13,9 @@ class FileStorage:
             while os.path.exists(self.directory_name):
                 self.generate_directory_name()
         os.mkdir(self.directory_name)
+
+        self.pre_defined_forbidden = FileStorage,  # comma is not a mistake.
+        self.forbidden_instances = self.pre_defined_forbidden + forbidden_instances
 
     def generate_directory_name(self, length=15):
         """Generating a random directory name """
@@ -33,6 +37,13 @@ class FileStorage:
             for key, values in json.load(f).items():
                 setattr(instance, key, values)
 
+    def clean_instance(self, instance):
+        entry = instance.__dict__
+        cleaned_entry = dict()
+        for k, v in entry.items():
+            if not isinstance(entry, self.forbidden_instances):
+                cleaned_entry[k] = v
+
     def set_file_content(self, instance):
         """ Setting the content from a grid file in file object.
         Using the native json.dump function to store it in a JSON string.
@@ -40,7 +51,7 @@ class FileStorage:
         """
         print(self.path(instance))
         with open(self.path(instance), 'w') as f:
-            json.dump(instance.__dict__, f)
+            json.dump(self.clean_instance(instance), f)
 
     def delete_folder(self):
         """ Clears the directory that's been created to store the files """
