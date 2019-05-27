@@ -123,7 +123,7 @@ class TestAlgorithmAstar(unittest.TestCase):
 
         for x in range(rows - 1):
             for y in range(cols - 1):
-                g[(x, y)].accessible = occupancy[x][y]
+                g[(x, y)].set_accessible(occupancy[x][y])
 
         start = g[(0, 0)]
 
@@ -145,7 +145,7 @@ class TestAlgorithmAstar(unittest.TestCase):
 
         for x in range(rows - 1):
             for y in range(cols - 1):
-                g[(x, y)].accessible = False
+                g[(x, y)].set_accessible(False)
 
         start = g[(0, 0)]
 
