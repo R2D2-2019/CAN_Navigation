@@ -77,7 +77,7 @@ class TestCellInFile(unittest.TestCase):
         cell_previous = CellInFile(FileStorage(), 0, 1)
         cell.set_previous(cell_previous)
 
-        self.assertEqual(cell_previous.get_x_y(), cell.previous)
+        self.assertEqual(cell_previous.get_x_y(), cell.previous.get_x_y())
         cell.file_storage.delete_folder()
         cell_previous.file_storage.delete_folder()
 
