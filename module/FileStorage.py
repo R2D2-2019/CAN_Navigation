@@ -40,9 +40,11 @@ class FileStorage:
     def clean_instance(self, instance):
         entry = instance.__dict__
         cleaned_entry = dict()
+
         for k, v in entry.items():
-            if not isinstance(entry, self.forbidden_instances):
+            if not isinstance(v, FileStorage):
                 cleaned_entry[k] = v
+        return cleaned_entry
 
     def set_file_content(self, instance):
         """ Setting the content from a grid file in file object.
