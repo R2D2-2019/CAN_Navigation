@@ -98,10 +98,10 @@ class CellInFile(CellInMemory):
         self.x = x
         self.y = y
         self.file_storage = file_storage
+        self.file_name = generate_file_name(self.x, self.y)
         if read:
             self.get_file_content()
         else:
-            self.file_name = generate_file_name(self.x, self.y)
             self.set_file_content()
 
     def __setattr__(self, key, value):
