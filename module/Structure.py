@@ -163,7 +163,7 @@ class GridInFile(GridInMemory):
         # TODO: Solve indexes that are empty arrays
         neighbour_index = [x for x in neighbour_index if x != []]  # Unsure what causes empty lists
         for x, y in neighbour_index:
-            neighbours.append([x, y])
+            neighbours.append(CellInFile(self.file_storage, x, y, read=True))
         return neighbours
 
     # TODO: Perhaps the set and get functions from the structure and cell should be static.
