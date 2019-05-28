@@ -1,5 +1,5 @@
-import unittest, time
-from module.Structure import GridInFile
+import unittest
+from modules.CAN_Navigation.module.Structure import GridInFile
 
 
 class TestGridInFile(unittest.TestCase):

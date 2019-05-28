@@ -1,6 +1,3 @@
-# TODO: must contain a memory check, must return the constructed grid type
-# (InMemory or InFile) with the limit Cell type
-
 from modules.CAN_Navigation.module.FileStorage import FileStorage
 from modules.CAN_Navigation.module.Cell import CellInMemory, CellInFile
 

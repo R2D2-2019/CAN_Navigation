@@ -1,5 +1,5 @@
 import unittest
-from module.Structure import CellInMemory
+from modules.CAN_Navigation.module.Structure import CellInMemory
 
 
 class TestCellInMemory(unittest.TestCase):

@@ -1,6 +1,6 @@
 import unittest
-from module.Structure import CellInFile
-from module.FileStorage import FileStorage
+from modules.CAN_Navigation.module.Structure import CellInFile
+from modules.CAN_Navigation.module.FileStorage import FileStorage
 
 
 class TestCellInFile(unittest.TestCase):
