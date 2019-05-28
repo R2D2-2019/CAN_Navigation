@@ -76,8 +76,7 @@ class TestCellInFile(unittest.TestCase):
         cell = CellInFile(FileStorage(), 0, 0)
         cell_previous = CellInFile(FileStorage(), 0, 1)
         cell.set_previous(cell_previous)
-
-        self.assertEqual(cell_previous.get_x_y(), cell.previous.get_x_y())
+        self.assertEqual([[0, 1]], cell.get_previous())
         cell.file_storage.delete_folder()
         cell_previous.file_storage.delete_folder()
 
@@ -89,7 +88,7 @@ class TestCellInFile(unittest.TestCase):
         cell_previous = CellInFile(FileStorage(), 0, 0)
         cell.set_previous(cell_previous)
 
-        self.assertEqual(None, cell.previous)
+        self.assertEqual([], cell.previous)
         cell.file_storage.delete_folder()
         cell_previous.file_storage.delete_folder()
 
@@ -98,7 +97,7 @@ class TestCellInFile(unittest.TestCase):
         Testing if the file contains the expected json string
         """
         cell = CellInFile(FileStorage(), 0, 0)
-        expected_json = '{"file_name": "0_0.json", "f": 0, "g": 0, "h": 0, "x": 0, "y": 0, "neighbours": [], "previous": null, "accessible": true}'
+        expected_json = '{"file_name": "0_0.json", "f": 0, "g": 0, "h": 0, "x": 0, "y": 0, "neighbours": [], "previous": [], "accessible": true}'
         actual_json = ""
         with open(cell.file_storage.path(cell), 'r') as f:
             actual_json = f.readline()

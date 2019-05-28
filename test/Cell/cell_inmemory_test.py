@@ -79,7 +79,7 @@ class TestCellInMemory(unittest.TestCase):
         cell_previous = CellInMemory(0, 0)
         cell.set_previous(cell_previous)
 
-        self.assertEqual(None, cell.previous)
+        self.assertEqual([], cell.previous)
 
 
 if __name__ == '__main__':
