@@ -103,10 +103,16 @@ class AStar(PathfindingAlgorithm):
         """
         self.path = []
         temp = self.open_set[self.l_index]
-        while hasattr(temp, 'previous'):
+
+        if isinstance(temp.previous, list):
+            self.path = temp.previous
+            self.path.reverse()
             self.path.append(temp.get_x_y())
-            temp = temp.previous
-        self.path.reverse()
+        else:
+            while hasattr(temp, 'previous'):
+                self.path.append(temp.get_x_y())
+                temp = temp.previous
+            self.path.reverse()
         return self.path
 
     def is_accessible(self, cell):
