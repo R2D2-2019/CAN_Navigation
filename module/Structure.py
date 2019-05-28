@@ -1,7 +1,3 @@
-# TODO: must contain a memory check, must return the constructed grid type
-# (InMemory or InFile) with the limit Cell type
-
-
 from modules.CAN_Navigation.module.Cell import CellInMemory, CellInFile
 import time, json
 
@@ -36,8 +32,6 @@ class Grid:
 
 
 class GridInMemory(Grid):
-
-    # TODO: Make it a data class
 
     def __init__(
             self,
@@ -152,13 +146,11 @@ class GridInFile(GridInMemory):
         self.get_grid()
         neighbour_index = self.get_neighbours_indexes(cell)  # Redirecting the call to the super.
         neighbours = list()
-        # TODO: Solve indexes that are empty arrays
         neighbour_index = [x for x in neighbour_index if x != []]  # Unsure what causes empty lists
         for x, y in neighbour_index:
             neighbours.append([x, y])
         return neighbours
 
-    # TODO: Perhaps the set and get functions from the structure and cell should be static.
     def get_file_content(self):
         """ Getting the content from a file and storing it in the object.
         """
