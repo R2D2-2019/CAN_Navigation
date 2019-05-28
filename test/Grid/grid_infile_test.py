@@ -102,7 +102,11 @@ class TestGridInFile(unittest.TestCase):
 
         ls = [[rows - 2, cols - 1], [rows - 1, cols - 2], [rows - 2, cols - 2]]
 
-        self.assertEqual(g.get_neighbours(uid), ls)
+        validation = list()
+        for neighbour in g.get_neighbours(uid):
+            validation.append(neighbour.get_x_y())
+
+        self.assertEqual(ls, validation)
         g.file_storage.delete_folder()
 
     def test_neighbour_limit_bottom_GridInFile(self):
@@ -117,7 +121,11 @@ class TestGridInFile(unittest.TestCase):
 
         ls = [[rows - 2, 0], [rows - 1, 1]]
 
-        self.assertEqual(g.get_neighbours(uid), ls)
+        validation = list()
+        for neighbour in g.get_neighbours(uid):
+            validation.append(neighbour.get_x_y())
+
+        self.assertEqual(ls, validation)
         g.file_storage.delete_folder()
 
     def test_neighbour_bottom_limit_GridInFile(self):
@@ -138,7 +146,11 @@ class TestGridInFile(unittest.TestCase):
               [4, 4],
               [6, 6]]
 
-        self.assertEqual(g.get_neighbours(uid), ls)
+        validation = list()
+        for neighbour in g.get_neighbours(uid):
+            validation.append(neighbour.get_x_y())
+
+        self.assertEqual(ls, validation)
         g.file_storage.delete_folder()
 
     def test_hash(self):
