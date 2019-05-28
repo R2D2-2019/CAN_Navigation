@@ -88,6 +88,7 @@ def main():
                 # if we press space for the first time we map obstacles to the grid and get a path
                 if event.key == pg.K_SPACE:
                     if not algo.path:
+                        # ignore key press when either start or end isn't marked
                         if not algo.start or not algo.end:
                             continue
 
