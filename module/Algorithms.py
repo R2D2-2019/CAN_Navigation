@@ -72,7 +72,7 @@ class AStar(PathfindingAlgorithm):
 
     def found_check(self):
         """ Checking if we found our end point """
-        return True if self.open_set[self.l_index] is self.end else False
+        return True if self.open_set[self.l_index].get_x_y() == self.end.get_x_y() else False
 
     def continuation_check(self):
         """ Checking if we can still continue searching """
@@ -115,7 +115,7 @@ class AStar(PathfindingAlgorithm):
         :param cell: Potential new cell
         :return: True if we can access it false if we can't
         """
-        return True if cell not in self.closed_set and cell.accessible else False
+        return True if not self.in_set(cell, self.closed_set) and cell.accessible else False
 
     def get_lowest_index_open_set(self):
         """
@@ -161,7 +161,7 @@ class AStar(PathfindingAlgorithm):
         This function is merely here for overriding by child.
         """
         pass
-    
+
     def in_set(self, cell, type_set):
         in_set = False
         for cells in type_set:
@@ -189,19 +189,16 @@ class AStar(PathfindingAlgorithm):
             for cell in neighbours:
                 if self.is_accessible(cell):
                     temp_g = cell.g + 1
-
-                    if cell in self.open_set:
+                    if self.in_set(cell, self.open_set):
                         if temp_g < cell.g:
                             cell.g = temp_g
                     else:
                         cell.g = temp_g
-
                         self.open_set.append(cell)
 
                     cell.h = calculate_heuristic(cell, self.end)
                     cell.f = cell.g + cell.h
                     cell.set_previous(self.open_set[self.l_index])
-
             self.closed_set.append(self.open_set[self.l_index])
             # ensuring that we don't come across the same element again
             del self.open_set[self.l_index]
