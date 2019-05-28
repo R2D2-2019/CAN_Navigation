@@ -70,7 +70,7 @@ class CellInMemory(AstarCell):
         self.neighbours = []
         # Used for path acquiring when an algorithm is done. It while's
         # accessing all previous
-        self.previous = [None]
+        self.previous = list()
         self.accessible = True  # Currently we only have accessible as present or not present
 
     def __setattr__(self, key, value):
