@@ -6,13 +6,13 @@ import pygame as pg
 class Rectangle(pg.sprite.Sprite):
     """
     Square shape used in our AStar visualization. Provides an easy way to draw a rectangle shape using pygame.
-    Uses the euclid3 module for vector2.
+    Inherits from pygame sprite to pack them into a group later on.
     """
     def __init__(self, pos: list, size: list):
         """
         Default and only constructor.
-        :param pos: euclid3 vector2 for window position.
-        :param size: euclid3 vector2 for size in pixels.
+        :param pos: list that contains the x and y coordinates
+        :param size: list that contains the width and height
         """
         super().__init__()
         self.image = pg.Surface([size[0], size[1]])
