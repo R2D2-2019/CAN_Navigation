@@ -1,6 +1,6 @@
 import unittest
-from module.Algorithms import AStar
-from module.Structure import grid_factory
+from modules.CAN_Navigation.module.Algorithms import AStar
+from modules.CAN_Navigation.module.Grid import grid_factory
 
 
 class TestAlgorithmAstar(unittest.TestCase):
@@ -13,7 +13,7 @@ class TestAlgorithmAstar(unittest.TestCase):
         g = grid_factory(rows, cols)
         start = g[(0, 0)]
         end = g[(cols - 1, rows - 1)]
-        a_star = AStar(g, end, start)
+        a_star = AStar(g, start, end)
 
         self.assertEqual(g, a_star.grid)
 
@@ -25,7 +25,7 @@ class TestAlgorithmAstar(unittest.TestCase):
         g = grid_factory(rows, cols)
         start = g[(0, 0)]
         end = g[(cols - 1, rows - 1)]
-        a_star = AStar(g, end, start)
+        a_star = AStar(g, start, end)
 
         self.assertEqual(start, a_star.start)
 
@@ -37,7 +37,7 @@ class TestAlgorithmAstar(unittest.TestCase):
         g = grid_factory(rows, cols)
         start = g[(0, 0)]
         end = g[(cols - 1, rows - 1)]
-        a_star = AStar(g, end, start)
+        a_star = AStar(g, start, end)
 
         self.assertEqual(end, a_star.end)
 
@@ -100,18 +100,7 @@ class TestAlgorithmAstar(unittest.TestCase):
         end = g[(cols - 1, rows - 1)]
         a_star = AStar(g, start, end)
 
-        expected_path = [
-            [
-                0, 0], [
-                1, 1], [
-                2, 2], [
-                    3, 3], [
-                        4, 4], [
-                            5, 5], [
-                                6, 6], [
-                                    7, 7], [
-                                        8, 8], [
-                                            9, 9]]
+        expected_path = [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8], [9, 9]]
 
         self.assertEqual(expected_path, a_star.solve())
 
@@ -134,7 +123,7 @@ class TestAlgorithmAstar(unittest.TestCase):
 
         for x in range(rows - 1):
             for y in range(cols - 1):
-                g[(x, y)].accessible = occupancy[x][y]
+                g[(x, y)].set_accessible(occupancy[x][y])
 
         start = g[(0, 0)]
 
@@ -142,18 +131,7 @@ class TestAlgorithmAstar(unittest.TestCase):
 
         a_star = AStar(g, start, end)
 
-        expected_path = [
-            [
-                0, 0], [
-                1, 1], [
-                2, 2], [
-                    3, 3], [
-                        4, 4], [
-                            5, 5], [
-                                6, 6], [
-                                    7, 7], [
-                                        8, 8], [
-                                            9, 9]]
+        expected_path = [[0, 0], [0, 1], [1, 2], [1, 3], [1, 4], [2, 5], [2, 6], [3, 7], [3, 8], [3, 9], [2, 9], [1, 9]]
 
         self.assertEqual(expected_path, a_star.solve())
 
@@ -167,7 +145,7 @@ class TestAlgorithmAstar(unittest.TestCase):
 
         for x in range(rows - 1):
             for y in range(cols - 1):
-                g[(x, y)].accessible = False
+                g[(x, y)].set_accessible(False)
 
         start = g[(0, 0)]
 

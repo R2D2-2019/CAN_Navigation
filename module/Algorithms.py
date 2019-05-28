@@ -72,7 +72,7 @@ class AStar(PathfindingAlgorithm):
 
     def found_check(self):
         """ Checking if we found our end point """
-        return True if self.open_set[self.l_index] is self.end else False
+        return True if self.open_set[self.l_index].get_x_y() == self.end.get_x_y() else False
 
     def continuation_check(self):
         """ Checking if we can still continue searching """
@@ -103,11 +103,16 @@ class AStar(PathfindingAlgorithm):
         """
         self.path = []
         temp = self.open_set[self.l_index]
-        while hasattr(temp, 'previous'):
+
+        if isinstance(temp.previous, list):
+            self.path = temp.previous
+            self.path.reverse()
             self.path.append(temp.get_x_y())
-            temp = temp.previous
-        self.path.append(self.start.get_x_y())
-        self.path.reverse()
+        else:
+            while hasattr(temp, 'previous'):
+                self.path.append(temp.get_x_y())
+                temp = temp.previous
+            self.path.reverse()
         return self.path
 
     def is_accessible(self, cell):
@@ -116,7 +121,7 @@ class AStar(PathfindingAlgorithm):
         :param cell: Potential new cell
         :return: True if we can access it false if we can't
         """
-        return True if cell not in self.closed_set and cell.accessible else False
+        return True if not self.in_set(cell, self.closed_set) and cell.accessible else False
 
     def get_lowest_index_open_set(self):
         """
@@ -163,6 +168,12 @@ class AStar(PathfindingAlgorithm):
         """
         pass
 
+    def in_set(self, cell, type_set):
+        in_set = False
+        for cells in type_set:
+            if cell.get_x_y() == cells.get_x_y():
+                in_set = True
+        return in_set
 
     def run(self):
         """
@@ -177,28 +188,23 @@ class AStar(PathfindingAlgorithm):
             if self.found_check():  # If we've found our goal, ready to finalize
                 self.reconstruct_path()
                 self.iteration_path_found()
-                return self.path   # return with a path reconstruct function call
+                return self.path  # return with a path reconstruct function call
             self.current_cell = self.open_set[self.l_index]
             neighbours = self.grid.get_neighbours(self.current_cell)
             self.iteration_neighbours(neighbours)
             for cell in neighbours:
                 if self.is_accessible(cell):
                     temp_g = cell.g + 1
-                    new_path = False
-                    if cell in self.open_set:
+                    if self.in_set(cell, self.open_set):
                         if temp_g < cell.g:
                             cell.g = temp_g
-                            new_path = True
                     else:
                         cell.g = temp_g
-                        new_path = True
-
                         self.open_set.append(cell)
-                    if new_path:
-                        cell.h = calculate_heuristic(cell, self.end)
-                        cell.f = cell.g + cell.h
-                        cell.set_previous(self.open_set[self.l_index])
 
+                    cell.h = calculate_heuristic(cell, self.end)
+                    cell.f = cell.g + cell.h
+                    cell.set_previous(self.open_set[self.l_index])
             self.closed_set.append(self.open_set[self.l_index])
             # ensuring that we don't come across the same element again
             del self.open_set[self.l_index]
