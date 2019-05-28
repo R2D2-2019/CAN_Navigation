@@ -1,7 +1,7 @@
 from client.comm import BaseComm
 from common.frame_enum import FrameType
 from .Algorithms import AStar
-from .Structure import Grid
+from .Grid import Grid
 
 # TODO: make a pull request for this frame type
 

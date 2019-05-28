@@ -1,5 +1,5 @@
 import unittest
-from modules.CAN_Navigation.module.Structure import GridInFile
+from modules.CAN_Navigation.module.Grid import GridInFile
 
 
 class TestGridInFile(unittest.TestCase):

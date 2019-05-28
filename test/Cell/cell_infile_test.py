@@ -1,5 +1,5 @@
 import unittest
-from modules.CAN_Navigation.module.Structure import CellInFile
+from modules.CAN_Navigation.module.Grid import CellInFile
 from modules.CAN_Navigation.module.FileStorage import FileStorage
 
 
