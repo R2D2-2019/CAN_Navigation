@@ -2,7 +2,7 @@ from pipper import install_packages
 install_packages(['pygame', 'numpy'])
 from rectangle import Rectangle
 from modules.CAN_Navigation.module.Algorithms import AStar
-from modules.CAN_Navigation.module.Structure import grid_factory
+from modules.CAN_Navigation.module.Grid import grid_factory
 import pygame as pg
 import numpy as np
 

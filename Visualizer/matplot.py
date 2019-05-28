@@ -1,7 +1,7 @@
 from pipper import install_packages
 install_packages(['matplotlib'])
 
-from modules.CAN_Navigation.module.Structure import grid_factory
+from modules.CAN_Navigation.module.Grid import grid_factory
 from modules.CAN_Navigation.module.Algorithms import AStar
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
