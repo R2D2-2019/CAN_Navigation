@@ -31,7 +31,9 @@ def update_graph(c, ax, x_points, y_points):
 
 def main():
     """
-    Symbolic main function that does all the magic
+    Main fuction that gets all the needed variables to setup the grid and Astar class from input.
+    Asks the user if it needs to be animated or not.
+    Uses matplotlib animation function to visually represent the path as a line(s) in xy space.
     """
     grid_size = input_to_list_of_ints("grid size: ", ',')
     start = input_to_list_of_ints("start vector: ", ',')
@@ -49,11 +51,13 @@ def main():
     algo = AStar(grid, start_point, end_point)
     path = algo.solve()
 
+    # seperate the path into a list of x and y values
     x_points, y_points = list(), list()
     for vector2 in path:
         x_points.append(vector2[0])
         y_points.append(vector2[1])
 
+    # if the user wants animations we call FuncAnimation (matplotlib) else we just plot all at once
     if animated:
         ani = animation.FuncAnimation(figure, update_graph, interval=50, fargs=[
                                       axes, x_points, y_points], frames=len(x_points), repeat=False)

@@ -4,11 +4,23 @@ from rectangle import Rectangle
 from modules.CAN_Navigation.module.Algorithms import AStar
 from modules.CAN_Navigation.module.Grid import grid_factory
 
-
+# square shaped grids' fixed width/height
 GRID_SIZE = 60
 
 
 def main():
+    """
+    Main function that's basically the entire application.
+    Sets up pygame then fills a numpy array with rectangles to draw every draw call.
+    Checks for mouse and keyboard input, marks rectangles as obstacles on mouse click.
+    Uses keyboard input; S, E, Space, C to mark start and end, space to find a path and
+    C to clear the screen/start over.
+
+    TODO: Big GRID_SIZE numbers may cause slow down (marking obstacles too fast skips rectangles),
+    not sure if it's the application or something inherent to pygame.
+
+    """
+
     print("click to mark obstacles.")
     print("S: mark start. \nE: mark end. \nSpace: plot path. \nC: clear all.")
 
