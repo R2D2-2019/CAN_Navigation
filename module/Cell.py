@@ -70,7 +70,7 @@ class CellInMemory(AstarCell):
         self.neighbours = []
         # Used for path acquiring when an algorithm is done. It while's
         # accessing all previous
-        self.previous = None
+        self.previous = [None]
         self.accessible = True  # Currently we only have accessible as present or not present
 
     def __setattr__(self, key, value):
@@ -138,7 +138,7 @@ class CellInFile(CellInMemory):
             self.previous = [item.get_x_y()] + item.get_previous()
 
     def get_previous(self):
-        return [self.previous]
+        return self.previous
 
     def get_file_content(self):
         """ Getting the content from a file and storing it in the object.
