@@ -1,5 +1,5 @@
 import unittest
-from module.Structure import GridInMemory
+from modules.CAN_Navigation.module.Grid import GridInMemory
 
 
 class TestGridInMemory(unittest.TestCase):
@@ -33,7 +33,7 @@ class TestGridInMemory(unittest.TestCase):
 
         for x in range(rows - 1):
             for y in range(cols - 1):
-                g[(x, y)].accessible = z[x][y]
+                g[(x, y)].set_accessible(z[x][y])
 
         found = False
         for x in range(rows - 1):
@@ -64,7 +64,7 @@ class TestGridInMemory(unittest.TestCase):
 
         for x in range(rows - 1):
             for y in range(cols - 1):
-                g[(x, y)].accessible = z[x][y]
+                g[(x, y)].set_accessible(z[x][y])
 
         self.assertEqual(g[(int(rows / 2), int(cols / 2))
                            ].accessible, z[int(rows / 2)][int(cols / 2)])
