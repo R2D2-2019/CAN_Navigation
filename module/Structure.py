@@ -5,11 +5,17 @@ from modules.CAN_Navigation.module.FileStorage import FileStorage
 from modules.CAN_Navigation.module.Cell import CellInMemory, CellInFile
 
 
-def cell_factory(x, y, f=0, g=0, h=0):
+def cell_factory(instance, x, y, f=0, g=0, h=0):
     # Default allocation for the memory grid is inMemory cell
     # However it should be possible to use a different cell type
     # The reason why is unclear at this time.
-    return CellInMemory(x, y, f, g, h)
+    if isinstance(instance, (GridInMemory, GridInFile)):
+        if isinstance(instance, GridInMemory):
+            return CellInMemory(x, y, f, g, h)
+        elif isinstance(instance, GridInFile):
+            return CellInFile(x, y, f, g, h, h)
+    else:
+        return None
 
 
 class Grid:
@@ -51,7 +57,7 @@ class GridInMemory(Grid):
 
         # Scaling the grid to contain all all the cells.
         # Cells are still empty at this time, merely allocation.
-        self.grid = [[cell_factory(j, i) for i in range(self.columns)] for j in
+        self.grid = [[cell_factory(self, j, i) for i in range(self.columns)] for j in
                      range(self.rows)]
 
     def get_neighbours_indexes(self, cell):
