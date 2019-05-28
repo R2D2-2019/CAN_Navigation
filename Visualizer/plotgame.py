@@ -1,10 +1,8 @@
-from pipper import install_packages
-install_packages(['pygame', 'numpy'])
+import pygame as pg
+import numpy as np
 from rectangle import Rectangle
 from modules.CAN_Navigation.module.Algorithms import AStar
 from modules.CAN_Navigation.module.Grid import grid_factory
-import pygame as pg
-import numpy as np
 
 
 GRID_SIZE = 60
@@ -83,7 +81,7 @@ def main():
 
                         for x in range(grid.rows):
                             for y in range(grid.columns):
-                                if npblocks[y,x].obstacle:
+                                if npblocks[y, x].obstacle:
                                     grid[(x, y)].accessible = False
 
                         # calculate a path
@@ -96,7 +94,7 @@ def main():
 
                         # color the path yellow
                         for v2 in algo.path:
-                            npblocks[v2[1],v2[0]].set_color((0, 255, 255))
+                            npblocks[v2[1], v2[0]].set_color((0, 255, 255))
 
                 # if we press c we clear all variables and reset the grid and blocks
                 if event.key == pg.K_c:

@@ -1,13 +1,12 @@
-from pipper import install_packages
-install_packages(['pygame'])
-
 import pygame as pg
+
 
 class Rectangle(pg.sprite.Sprite):
     """
     Square shape used in our AStar visualization. Provides an easy way to draw a rectangle shape using pygame.
     Inherits from pygame sprite to pack them into a group later on.
     """
+
     def __init__(self, pos: list, size: list):
         """
         Default and only constructor.

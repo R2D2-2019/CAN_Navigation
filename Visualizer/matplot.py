@@ -1,11 +1,7 @@
-from pipper import install_packages
-install_packages(['matplotlib'])
-
 from modules.CAN_Navigation.module.Grid import grid_factory
 from modules.CAN_Navigation.module.Algorithms import AStar
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
-
 
 
 def input_to_list_of_ints(string: str, delimiter: chr):
