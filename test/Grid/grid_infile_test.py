@@ -82,8 +82,11 @@ class TestGridInFile(unittest.TestCase):
 
         ls = [[1, 0], [0, 1], [1, 1]]
 
-        self.assertEqual(g.get_neighbours(uid), ls)
+        validation = list()
+        for neighbour in g.get_neighbours(uid):
+            validation.append(neighbour.get_x_y())
 
+        self.assertEqual(ls, validation)
         g.file_storage.delete_folder()
 
     def test_neighbour_limit_limit_GridInFile(self):
