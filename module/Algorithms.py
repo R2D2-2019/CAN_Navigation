@@ -161,6 +161,13 @@ class AStar(PathfindingAlgorithm):
         This function is merely here for overriding by child.
         """
         pass
+    
+    def in_set(self, cell, type_set):
+        in_set = False
+        for cells in type_set:
+            if cell.get_x_y() == cells.get_x_y():
+                in_set = True
+        return in_set
 
     def run(self):
         """
