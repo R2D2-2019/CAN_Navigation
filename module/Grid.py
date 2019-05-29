@@ -113,7 +113,7 @@ class GridInMemory(Grid):
 
 
 class GridInNumpy(Grid):
-    """The entire numpy grid should be"""
+    """The GridInNumpy has less functions, this has to do with Numpy doing the heavy lifting. """
 
     def __init__(self, columns, rows):
         Grid.__init__(self, columns, rows)
