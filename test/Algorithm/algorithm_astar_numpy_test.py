@@ -39,6 +39,7 @@ class TestAlgorithmAstarNumpy(unittest.TestCase):
         a_star = AstarNumpy(g, start, end)
 
         self.assertEqual(end, a_star.end)
+
     def test_astar_run_check(self):
         """ Checking the false positive for the run_check"""
         rows = 10
@@ -47,7 +48,6 @@ class TestAlgorithmAstarNumpy(unittest.TestCase):
         g = GridInNumpy(rows, cols)
         a_star = AstarNumpy(g)
 
-
         self.assertEqual(False, a_star.run_check())
 
     def test_astar_run_check_single_condition(self):
@@ -55,10 +55,10 @@ class TestAlgorithmAstarNumpy(unittest.TestCase):
         rows = 10
         cols = 10
 
-        g = grid_factory(rows, cols)
+        g = GridInNumpy(rows, cols)
 
         start = g[(0, 0)]
-        a_star = AStar(g, start)
+        a_star = AstarNumpy(g, start)
 
         self.assertEqual(False, a_star.run_check())
 
@@ -67,11 +67,11 @@ class TestAlgorithmAstarNumpy(unittest.TestCase):
         rows = 10
         cols = 10
 
-        g = grid_factory(rows, cols)
+        g = GridInNumpy(rows, cols)
 
         start = g[(0, 0)]
         end = g[(cols - 1, rows - 1)]
-        a_star = AStar(g, start, end)
+        a_star = AstarNumpy(g, start, end)
 
         self.assertEqual(True, a_star.run_check())
 
@@ -81,10 +81,10 @@ class TestAlgorithmAstarNumpy(unittest.TestCase):
         rows = 10
         cols = 10
 
-        g = grid_factory(rows, cols)
+        g = GridInNumpy(rows, cols)
 
         start = g[(0, 0)]
-        a_star = AStar(g, start)
+        a_star = AstarNumpy(g, start)
 
         self.assertEqual(None, a_star.solve())
 
@@ -93,11 +93,11 @@ class TestAlgorithmAstarNumpy(unittest.TestCase):
         rows = 10
         cols = 10
 
-        g = grid_factory(rows, cols)
+        g = GridInNumpy(rows, cols)
 
         start = g[(0, 0)]
         end = g[(cols - 1, rows - 1)]
-        a_star = AStar(g, start, end)
+        a_star = AstarNumpy(g, start, end)
 
         expected_path = [
             [
@@ -119,7 +119,7 @@ class TestAlgorithmAstarNumpy(unittest.TestCase):
         rows = 10
         cols = 10
 
-        g = grid_factory(rows, cols)
+        g = GridInNumpy(rows, cols)
         occupancy = [[False, True, True, False, True, True, True, False, False, True],
                      [True, False, True, True, True, False, True, True, False, True],
                      [True, False, True, False, True, True, True, False, False, True],
@@ -139,7 +139,7 @@ class TestAlgorithmAstarNumpy(unittest.TestCase):
 
         end = g[(cols - 9, rows - 1)]
 
-        a_star = AStar(g, start, end)
+        a_star = AstarNumpy(g, start, end)
 
         expected_path = [
             [
@@ -162,7 +162,7 @@ class TestAlgorithmAstarNumpy(unittest.TestCase):
         rows = 10
         cols = 10
 
-        g = grid_factory(rows, cols)
+        g = GridInNumpy(rows, cols)
 
         for x in range(rows - 1):
             for y in range(cols - 1):
@@ -172,6 +172,6 @@ class TestAlgorithmAstarNumpy(unittest.TestCase):
 
         end = g[(cols - 9, rows - 1)]
 
-        a_star = AStar(g, start, end)
+        a_star = AstarNumpy(g, start, end)
 
         self.assertEqual(a_star.solve(), False)
