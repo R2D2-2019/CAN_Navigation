@@ -199,16 +199,21 @@ class AStar(PathfindingAlgorithm):
             for cell in neighbours:
                 if self.is_accessible(cell):
                     temp_g = cell.g + 1
+                    new_path = False
                     if self.in_set(cell, self.open_set):
                         if temp_g < cell.g:
                             cell.g = temp_g
+                            new_path = True
                     else:
                         cell.g = temp_g
-                        self.open_set.append(cell)
+                        new_path = True
 
-                    cell.h = calculate_heuristic(cell, self.end)
-                    cell.f = cell.g + cell.h
-                    cell.set_previous(self.open_set[self.l_index])
+                        self.open_set.append(cell)
+                    if new_path:
+                        cell.h = calculate_heuristic(cell, self.end)
+                        cell.f = cell.g + cell.h
+                        cell.set_previous(self.open_set[self.l_index])
+            
             self.closed_set.append(self.open_set[self.l_index])
             # ensuring that we don't come across the same element again
             del self.open_set[self.l_index]
