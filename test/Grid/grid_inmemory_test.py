@@ -129,8 +129,6 @@ class TestGridInMemory(unittest.TestCase):
 
         self.assertEqual(False, duplicates)
 
-    # TODO: Dynamic allocation
-
     def test_neighbour_bottom_limit_GridInMemory(self):
         """ Testing if the neighbour for the [0][limit] index position is working as expected """
         rows = 10

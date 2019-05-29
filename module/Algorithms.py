@@ -1,3 +1,6 @@
+from heapq import heappush, heappop
+
+
 def calculate_heuristic(neighbor, end):
     """
     Calculating the heuristic based on coordinates of end and next cell
@@ -5,8 +8,10 @@ def calculate_heuristic(neighbor, end):
     :param end:  cell where we want to end up
     :return: int value for the distance
     """
-    distance = abs(neighbor.x - end.x) + abs(neighbor.y - end.y)
-    return distance
+
+    if isinstance(neighbor, tuple) or isinstance(end, tuple):
+        return (end[0] - neighbor[0]) + (end[1] - neighbor[1])
+    return abs(neighbor.x - end.x) + abs(neighbor.y - end.y)
 
 
 class Algorithm:
@@ -67,8 +72,6 @@ class AStar(PathfindingAlgorithm):
         self.l_index = 0
         # These lists are empty by default
         self.open_set, self.closed_set = list(), list()
-
-    # TODO: Docs
 
     def found_check(self):
         """ Checking if we found our end point """
@@ -163,7 +166,6 @@ class AStar(PathfindingAlgorithm):
         """
         pass
 
-
     def run(self):
         """
         The main implementation of the A* algorithm. Recommend reading the wiki pseudo-code to understand it.
@@ -177,7 +179,7 @@ class AStar(PathfindingAlgorithm):
             if self.found_check():  # If we've found our goal, ready to finalize
                 self.reconstruct_path()
                 self.iteration_path_found()
-                return self.path   # return with a path reconstruct function call
+                return self.path  # return with a path reconstruct function call
             self.current_cell = self.open_set[self.l_index]
             neighbours = self.grid.get_neighbours(self.current_cell)
             self.iteration_neighbours(neighbours)
@@ -203,5 +205,109 @@ class AStar(PathfindingAlgorithm):
             # ensuring that we don't come across the same element again
             del self.open_set[self.l_index]
             self.iteration_end()
+        self.iteration_no_path_found()
+        return False
+
+
+class AstarNumpy(AStar):
+    """ The AstarNumpy works a little bit differently from the other AStar implementation.
+    The reason for this change is because NumPy works best when we're NOT storing objects with arrays.
+    It's best to store values and allow NumPy to deal with the math complexity.
+    For the current implementation we're only allowing boolean logic for accessibility.
+    This might seem similar to others, however implementing this to use integral or different stages of
+    accessibility (i.e. different scales of complex it is to get somewhere) will require everything to be rewritten.
+    Keep this in mind for future progress.
+    Date of creation: 28 of May 2019.
+    """
+
+    def __init__(self, grid, start=None, end=None):
+        """
+        :param grid: A grid or node based structure that knows indexes
+        :param start: The start cell
+        :param end: The end cell
+        """
+        AStar.__init__(self, grid, start, end)
+
+        self.grid = grid  # I've decided AGAINST creating a grid because this would mess with the numpy access operators
+        # Simply put calling variables using [] would result in [()] and calling actual grid functions
+        self.end = end
+        self.start = start
+        self.path = []
+        self.current_cell = None
+
+        """In here you will find one of the biggest changes made in the implementation
+        NumPy is the master when it comes to data management, so we won't even bother creating unique instances
+        for each and every cell, we will leave that to numpy. What we do need to do is keep track of the data
+        We would ordinarily store in a cell, in this case we use 
+        """
+        self.g = {self.start: 0}
+        self.f = {self.start: calculate_heuristic(self.start, self.end)}
+        # These lists are empty by default
+        self.open_set, self.closed_set = list(), set()
+        self.previous = {}
+
+    def solve(self):
+        """ :returns list | bool """
+        if self.run_check():
+            heappush(self.open_set, (self.f[self.start], self.start))
+            return self.run()
+        else:
+            return None
+
+    def found_check(self):
+        """
+        Answers the: have we found our end destination
+        :returns bool """
+        return True if self.current_cell == self.end else False
+
+    def reconstruct_path(self):
+        """After we've found our path we can rebuild it by asking our previous for the previous and so on.
+        :returns void
+        """
+        self.path = []
+        while self.current_cell in self.previous:
+            self.path.append(self.current_cell)
+            self.current_cell = self.previous[self.current_cell]
+        self.path.append(self.start)
+        self.path.reverse()
+
+    def run(self):
+        """The main loop that has the algorithm's run in it.
+        :returns list | bool
+        """
+        while self.continuation_check():  # Are we allowed to continue or have we exploited all our possibilities?
+            self.iteration_start()
+            self.current_cell = heappop(self.open_set)[1]  # Popping also means we don't have to remove it later!
+
+            if self.found_check():
+                self.reconstruct_path()
+                self.iteration_path_found()
+                return self.path
+
+            neighbours = self.grid.get_neighbours(self.current_cell)
+
+            self.iteration_neighbours(neighbours)
+            for neighbor in neighbours:
+                temp_g = self.g[self.current_cell] + calculate_heuristic(self.current_cell, neighbor)
+                if 0 <= neighbor[0] < self.grid.array.shape[0]:
+                    if 0 <= neighbor[1] < self.grid.array.shape[1]:
+                        if self.grid.array[neighbor[0]][neighbor[1]] == 1:
+                            continue
+                    else:
+                        continue
+                else:
+                    continue
+
+                if neighbor in self.closed_set and temp_g >= self.g.get(neighbor, 0):
+                    continue
+
+                if temp_g < self.g.get(neighbor, 0) or neighbor not in [i[1] for i in self.open_set]:
+                    self.previous[neighbor] = self.current_cell
+                    self.g[neighbor] = temp_g
+                    self.f[neighbor] = temp_g + calculate_heuristic(neighbor, self.end)
+                    heappush(self.open_set, (self.f[neighbor], neighbor))  # pushing our new found element to be checked
+
+                self.closed_set.add(self.current_cell)
+                self.iteration_end()
         self.iteration_no_path_found()
         return False
