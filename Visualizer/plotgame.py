@@ -103,7 +103,6 @@ def main():
                         # remove start(twice) and end node from the path
                         algo.path.pop()
                         algo.path.pop(0)
-                        algo.path.pop(0)
 
                         # color the path yellow
                         for v2 in algo.path:
