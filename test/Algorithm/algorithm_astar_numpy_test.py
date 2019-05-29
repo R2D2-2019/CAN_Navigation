@@ -57,7 +57,7 @@ class TestAlgorithmAstarNumpy(unittest.TestCase):
 
         g = GridInNumpy(rows, cols)
 
-        start = g[(0, 0)]
+        start = g[0, 0]
         a_star = AstarNumpy(g, start)
 
         self.assertEqual(False, a_star.run_check())
@@ -69,10 +69,7 @@ class TestAlgorithmAstarNumpy(unittest.TestCase):
 
         g = GridInNumpy(rows, cols)
 
-        start = g[(0, 0)]
-        end = g[(cols - 1, rows - 1)]
-        a_star = AstarNumpy(g, start, end)
-
+        a_star = AstarNumpy(g, (0, 0), (cols - 1, rows - 1))
         self.assertEqual(True, a_star.run_check())
 
     def test_astar_solve_run_check_correct(self):
@@ -83,7 +80,7 @@ class TestAlgorithmAstarNumpy(unittest.TestCase):
 
         g = GridInNumpy(rows, cols)
 
-        start = g[(0, 0)]
+        start = g.array[0, 0]
         a_star = AstarNumpy(g, start)
 
         self.assertEqual(None, a_star.solve())
@@ -95,23 +92,20 @@ class TestAlgorithmAstarNumpy(unittest.TestCase):
 
         g = GridInNumpy(rows, cols)
 
-        start = g[(0, 0)]
-        end = g[(cols - 1, rows - 1)]
-        a_star = AstarNumpy(g, start, end)
+        a_star = AstarNumpy(g, (0, 0), (cols - 1, rows - 1))
 
         expected_path = [
-            [
-                0, 0], [
-                1, 1], [
-                2, 2], [
-                3, 3], [
-                4, 4], [
-                5, 5], [
-                6, 6], [
-                7, 7], [
-                8, 8], [
-                9, 9]]
-
+            (
+                0, 0), (
+                1, 1), (
+                2, 2), (
+                3, 3), (
+                4, 4), (
+                5, 5), (
+                6, 6), (
+                7, 7), (
+                8, 8), (
+                9, 9)]
         self.assertEqual(expected_path, a_star.solve())
 
     def test_astar_filled_run(self):
@@ -133,27 +127,22 @@ class TestAlgorithmAstarNumpy(unittest.TestCase):
 
         for x in range(rows - 1):
             for y in range(cols - 1):
-                g[(x, y)].accessible = occupancy[x][y]
+                if occupancy[x][y] is False:
+                    g.array[x, y] = 1
 
-        start = g[(0, 0)]
+        a_star = AstarNumpy(g, (0, 0), (cols - 1, rows - 1))
 
-        end = g[(cols - 9, rows - 1)]
-
-        a_star = AstarNumpy(g, start, end)
-
-        expected_path = [
-            [
-                0, 0], [
-                1, 1], [
-                2, 2], [
-                3, 3], [
-                4, 4], [
-                5, 5], [
-                6, 6], [
-                7, 7], [
-                8, 8], [
-                9, 9]]
-
+        expected_path = [(0, 0),
+                         (0, 1),
+                         (1, 2),
+                         (2, 2),
+                         (3, 3),
+                         (4, 4),
+                         (5, 5),
+                         (6, 6),
+                         (7, 7),
+                         (8, 8),
+                         (9, 9)]
         self.assertEqual(expected_path, a_star.solve())
 
     def test_astar_impossible_run(self):
@@ -166,12 +155,8 @@ class TestAlgorithmAstarNumpy(unittest.TestCase):
 
         for x in range(rows - 1):
             for y in range(cols - 1):
-                g[(x, y)].accessible = False
+                g.array[x][y] = 1
 
-        start = g[(0, 0)]
-
-        end = g[(cols - 9, rows - 1)]
-
-        a_star = AstarNumpy(g, start, end)
+        a_star = AstarNumpy(g, (0, 0), (cols - 1, rows - 1))
 
         self.assertEqual(a_star.solve(), False)
