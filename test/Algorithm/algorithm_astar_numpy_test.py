@@ -44,8 +44,9 @@ class TestAlgorithmAstarNumpy(unittest.TestCase):
         rows = 10
         cols = 10
 
-        g = grid_factory(rows, cols)
-        a_star = AStar(g)
+        g = GridInNumpy(rows, cols)
+        a_star = AstarNumpy(g)
+
 
         self.assertEqual(False, a_star.run_check())
 
