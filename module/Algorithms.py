@@ -246,7 +246,8 @@ class AstarNumpy(AStar):
         """In here you will find one of the biggest changes made in the implementation
         NumPy is the master when it comes to data management, so we won't even bother creating unique instances
         for each and every cell, we will leave that to numpy. What we do need to do is keep track of the data
-        We would ordinarily store in a cell, in this case we use 
+        we would ordinarily store in a cell, in this case we use two dicts
+
         """
         self.g = {self.start: 0}
         self.f = {self.start: calculate_heuristic(self.start, self.end)}
