@@ -121,10 +121,6 @@ class GridInNumpy(Grid):
         # Numpy has a function that allows us to set the default value (zero) and make a NumPy array out of it.
         self.array = np.zeros((columns, rows), dtype=int)
 
-    def __setitem__(self, lst, value):
-        """Allowing cases to be set"""
-        (x, y) = lst
-        self.array[x][y].f = value
 
     def get_neighbours(self, cell):
         """Numpy way of returning the expected structure"""

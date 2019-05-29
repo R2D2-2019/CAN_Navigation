@@ -1,6 +1,6 @@
 import unittest
-from modules.CAN_Navigation.module.Algorithms import AStar
-from modules.CAN_Navigation.module.Grid import grid_factory
+from modules.CAN_Navigation.module.Algorithms import AstarNumpy
+from modules.CAN_Navigation.module.Grid import GridInNumpy
 
 class TestAlgorithmAstar(unittest.TestCase):
 
@@ -9,12 +9,12 @@ class TestAlgorithmAstar(unittest.TestCase):
         rows = 10
         cols = 10
 
-        g = grid_factory(rows, cols)
-        start = g[(0, 0)]
-        end = g[(cols - 1, rows - 1)]
-        a_star = AStar(g, end, start)
+        g = GridInNumpy(rows, cols)
+        start = g.array[0, 0]
+        end = g[cols - 1, rows - 1]
+        a_star = AstarNumpy(g, start, end)
+        self.assertEqual(g.array.any(), a_star.grid.array.any())
 
-        self.assertEqual(g, a_star.grid)
 
     def test_grid_start_access(self):
         """ Testing if the astar start location is stored accordingly """

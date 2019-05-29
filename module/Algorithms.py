@@ -8,7 +8,8 @@ def calculate_heuristic(neighbor, end):
     :param end:  cell where we want to end up
     :return: int value for the distance
     """
-
+    if None == neighbor or None == end:
+        return None
     if isinstance(neighbor, tuple) or isinstance(end, tuple):
         return (end[0] - neighbor[0]) + (end[1] - neighbor[1])
     return abs(neighbor.x - end.x) + abs(neighbor.y - end.y)
@@ -252,6 +253,8 @@ class AstarNumpy(AStar):
         # These lists are empty by default
         self.open_set, self.closed_set = list(), set()
         self.previous = {}
+
+
 
     def solve(self):
         """ :returns list | bool """
