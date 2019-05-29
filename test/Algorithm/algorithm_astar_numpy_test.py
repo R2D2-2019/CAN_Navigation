@@ -1,7 +1,6 @@
 import unittest
-from module.Algorithms import AStar
-from module.Structure import grid_factory
-
+from modules.CAN_Navigation.module.Algorithms import AStar
+from modules.CAN_Navigation.module.Grid import grid_factory
 
 class TestAlgorithmAstar(unittest.TestCase):
 

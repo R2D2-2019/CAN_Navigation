@@ -1,6 +1,3 @@
-import json
-
-
 class Cell:
 
     def __init__(self):
@@ -12,17 +9,29 @@ class Cell:
     def __getattr__(self, item):
         pass
 
+
+class AstarCell(Cell):
+    def __init__(
+            self,
+            x,
+            y,
+            f=0,
+            g=0,
+            h=0,
+    ):
+        pass
+
     def get_x_y(self):
         pass
 
-    def get_neighbours(self):
+    def set_accessible(self, state):
         pass
 
     def set_previous(self, item):
         pass
 
 
-class CellInMemory(Cell):
+class CellInMemory(AstarCell):
     """ InMemory storage for a Cell
     Inherits from the Abstract Cell class.
     """
@@ -57,7 +66,7 @@ class CellInMemory(Cell):
         self.neighbours = []
         # Used for path acquiring when an algorithm is done. It while's
         # accessing all previous
-        self.previous = None
+        self.previous = list()
         self.accessible = True  # Currently we only have accessible as present or not present
 
     def __setattr__(self, key, value):
@@ -78,6 +87,9 @@ class CellInMemory(Cell):
     def __getattr__(self, key):
         return object.__getattribute__(self, key)
 
+    def set_accessible(self, state):
+        self.accessible = state
+
     def get_x_y(self):
         """ Getting the  Cell X and Y coordinates.
                 Returns:
@@ -87,19 +99,20 @@ class CellInMemory(Cell):
 
 
 def generate_file_name(x, y):
-    return "Cell/" + str(x) + "_" + str(y) + ".json"
+    return str(x) + "_" + str(y) + ".json"
 
 
 class CellInFile(CellInMemory):
-    def __init__(self, x=0, y=0, f=0, g=0, h=0, read=False):
+    def __init__(self, file_storage, x=0, y=0, f=0, g=0, h=0, read=False):
         self.file_name = None
         CellInMemory.__init__(self, x, y, f, g, h)
         self.x = x
         self.y = y
+        self.file_storage = file_storage
+        self.file_name = generate_file_name(self.x, self.y)
         if read:
             self.get_file_content()
         else:
-            self.file_name = generate_file_name(self.x, self.y)
             self.set_file_content()
 
     def __setattr__(self, key, value):
@@ -108,24 +121,37 @@ class CellInFile(CellInMemory):
         Keep in mind that these variables will also be stored in the file.
         """
         self.__dict__[key] = value
-        if self.file_name:
-            self.set_file_content()
+
+    def set_previous(self, item):
+        """ Setting the previous Cell.
+        Detects if the item points to itself.
+
+
+        item (obj): Cell like object that has get_x_y function.
+
+        """
+        if self.get_x_y() != item.get_x_y():
+            self.previous = [item.get_x_y()] + item.get_previous()
+
+    def get_previous(self):
+        return self.previous
 
     def get_file_content(self):
         """ Getting the content from a file and storing it in the object.
         Afterwards removing the file_name, conserve memory and can be generated.
         """
-        with open(generate_file_name(self.x, self.y), 'r') as f:
-            for key, values in json.load(f).items():
-                setattr(self, key, values)
+        self.file_storage.get_file_content(self)
 
     def set_file_content(self):
         """ Setting the content from a cell in file object.
         Using the native json.dump function to store it in a JSON string.
         Uses the __dict__ call to store ALL object attributes
         """
-        with open(generate_file_name(self.x, self.y), 'w') as f:
-            json.dump(self.__dict__, f)
+        self.file_storage.set_file_content(self)
+
+    def set_accessible(self, state):
+        self.accessible = state
+        self.set_file_content()
 
     def __delete__(self, instance):
         self.set_file_content()

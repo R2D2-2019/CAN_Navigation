@@ -1,15 +1,19 @@
+from modules.CAN_Navigation.module.FileStorage import FileStorage
 from modules.CAN_Navigation.module.Cell import CellInMemory, CellInFile
-import time
-import json
 import numpy as np
-from itertools import product
 
 
-def cell_factory(x, y, f=0, g=0, h=0):
+def cell_factory(instance, x, y, f=0, g=0, h=0):
     # Default allocation for the memory grid is inMemory cell
     # However it should be possible to use a different cell type
     # The reason why is unclear at this time.
-    return CellInMemory(x, y, f, g, h)
+    if isinstance(instance, (GridInMemory, GridInFile)):
+        if isinstance(instance, GridInMemory):
+            return CellInMemory(x, y, f, g, h)
+        elif isinstance(instance, GridInFile):
+            return CellInFile(x, y, f, g, h, h)
+    else:
+        return None
 
 
 class Grid:
@@ -49,7 +53,7 @@ class GridInMemory(Grid):
 
         # Scaling the grid to contain all all the cells.
         # Cells are still empty at this time, merely allocation.
-        self.grid = [[cell_factory(j, i) for i in range(self.columns)] for j in
+        self.grid = [[cell_factory(self, j, i) for i in range(self.columns)] for j in
                      range(self.rows)]
 
     def get_neighbours_indexes(self, cell):
@@ -142,32 +146,37 @@ class GridInNumpy(Grid):
 
 class GridInFile(GridInMemory):
 
-    def __init__(self, columns=0, rows=0):
+    def __init__(self, columns=0, rows=0, file_storage=None):
         # The InFile will create it's own file structure on a hard drive (in the module folder)
         # In Order to prevent collisions we'll be using the epoch time and the grid size to hash a path
         # While these will prevent MOSTLY prevent collisions, they aren't
         # immune to it.
         GridInMemory.__init__(self, columns, rows)
         self.grid = list()
+        self.file_name = ""  # Defining in the constructor because attributes need to declared in the init
 
-        self.epoch_time = int(time.time())
-        self.file_name = None
+        self.hash_file_name()
 
-        self.directory_name = "Cell/"
-        import os
-        if not os.path.exists(self.directory_name):
-            os.mkdir(self.directory_name)
-        self.hash_path()
+        # Instantiating a new FileStorage if we aren't supplied one.
+        if not file_storage:
+            self.file_storage = FileStorage()
+        else:
+            self.file_storage = file_storage
+
         self.initialize_grid()
 
-    def hash_path(self):
-        self.file_name = "Cell/" + str(self.epoch_time) + "_" + str(self.columns) + "_" + str(self.rows) + ".json"
+    def hash_file_name(self):
+        """ Getting the file_name
+        Stored in a separate function call, because it might become a limitation to store only a single grid.json
+        """
+        self.file_name = "grid.json"
 
     def generate_grid(self):
         # Ensuring that the cell objects exist
         for i in range(0, self.columns):
             for j in range(0, self.rows):
-                CellInFile(i, j)  # We don't need to store them, because we can just rebuild them when we need them
+                CellInFile(self.file_storage, i, j)  # We don't need to store them,
+                # because we can just rebuild them when we need them
 
         for i in range(0, self.columns):
             for j in range(0, self.rows):
@@ -179,27 +188,27 @@ class GridInFile(GridInMemory):
 
     def get_neighbours(self, cell):
         self.get_grid()
+
+        # TODO:Catch the output of x_y too.
+
         neighbour_index = self.get_neighbours_indexes(cell)  # Redirecting the call to the super.
         neighbours = list()
         neighbour_index = [x for x in neighbour_index if x != []]  # Unsure what causes empty lists
         for x, y in neighbour_index:
-            neighbours.append([x, y])
+            neighbours.append(CellInFile(self.file_storage, x, y, read=True))
         return neighbours
 
     def get_file_content(self):
         """ Getting the content from a file and storing it in the object.
         """
-        with open(self.file_name, 'r') as f:
-            for key, values in json.load(f).items():
-                setattr(self, key, values)
+        self.file_storage.get_file_content(self)
 
     def set_file_content(self):
         """ Setting the content from a grid file in file object.
         Using the native json.dump function to store it in a JSON string.
         Uses the __dict__ call to store ALL object attributes
         """
-        with open(self.file_name, 'w') as f:
-            json.dump(self.__dict__, f)
+        self.file_storage.set_file_content(self)
         self.grid = None
 
     def get_grid(self):
@@ -222,18 +231,16 @@ class GridInFile(GridInMemory):
     def __getitem__(self, coordinates):
         (x, y) = coordinates
         if self.in_grid(x, y):
-            return CellInFile(x, y, read=True)
+            return CellInFile(self.file_storage, x, y, read=True)
         return False
 
     def __setitem__(self, lst, value):
         (x, y) = lst
-        c = CellInFile(x, y, read=True)
-        CellInFile(x, y, c.f, c.g, c.h, read=False)
+        c = CellInFile(self.file_storage, x, y, read=True)
+        CellInFile(self.file_storage, x, y, c.f, c.g, c.h, read=False)
 
     def remove_json_files(self):
-        """ Clears the directory that's been created to store the files """
-        import shutil
-        shutil.rmtree(self.directory_name)
+        self.file_storage.delete_folder()
 
     def __str__(self):
         pass
