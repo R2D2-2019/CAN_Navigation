@@ -1,5 +1,8 @@
 from modules.CAN_Navigation.module.Cell import CellInMemory, CellInFile
-import time, json
+import time
+import json
+import numpy as np
+from itertools import product
 
 
 def cell_factory(x, y, f=0, g=0, h=0):
@@ -103,6 +106,38 @@ class GridInMemory(Grid):
                 text += str(self.grid[column][row].f)
             text += '\n'
         return text
+
+
+class GridInNumpy(Grid):
+    """The entire numpy grid should be"""
+
+    def __init__(self, columns, rows):
+        Grid.__init__(self, columns, rows)
+
+        # Numpy has a function that allows us to set the default value (zero) and make a NumPy array out of it.
+        self.array = np.zeros((columns, rows), dtype=int)
+
+    def __setitem__(self, lst, value):
+        """Allowing cases to be set"""
+        (x, y) = lst
+        self.array[x][y].f = value
+
+    def get_neighbours(self, cell):
+        """Numpy way of returning the expected structure"""
+
+        """Side note, numpy will catch this if impossible, we don't have to worry about it.
+        We can simply use all the possible outcomes, we don't need to catch it using a series of if statements.
+        I've initially done these values in a loop, but it's a waste of doing so considering they're static.
+        """
+        possible_neighbours = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
+
+        # Initialising our soon-to-be return type.
+        neighbours = list()
+
+        # Appending the possibilities based on the cell index to return the possible neighbours.
+        for x, y in possible_neighbours:
+            neighbours.append((cell[0] + x, cell[1] + y))
+        return neighbours
 
 
 class GridInFile(GridInMemory):
