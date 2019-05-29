@@ -2,7 +2,7 @@ import unittest
 from modules.CAN_Navigation.module.Algorithms import AstarNumpy
 from modules.CAN_Navigation.module.Grid import GridInNumpy
 
-class TestAlgorithmAstar(unittest.TestCase):
+class TestAlgorithmAstarNumpy(unittest.TestCase):
 
     def test_grid_access(self):
         """ Testing if the grid is stored accordingly """
