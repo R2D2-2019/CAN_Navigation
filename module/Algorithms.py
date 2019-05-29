@@ -8,7 +8,7 @@ def calculate_heuristic(neighbor, end):
     :param end:  cell where we want to end up
     :return: int value for the distance
     """
-    if None == neighbor or None == end:
+    if not neighbor or not end:
         return None
     if isinstance(neighbor, tuple) or isinstance(end, tuple):
         return (end[0] - neighbor[0]) + (end[1] - neighbor[1])
@@ -181,7 +181,7 @@ class AStar(PathfindingAlgorithm):
 
     def run(self):
         """
-        The main implementation of the A* algorithm. Recommend reading the wiki pseudo-code to understand it.
+        The main implementation of the A* algorithm. Recommend reading the Wikipedia pseudo-code to understand it.
 
         :return: False if no path is found or list when path is found
         """
