@@ -1,32 +1,30 @@
 import unittest
-from modules.CAN_Navigation.module.Algorithms import AStar
-from modules.CAN_Navigation.module.Grid import grid_factory
+from modules.CAN_Navigation.module.Algorithms import AstarNumpy
+from modules.CAN_Navigation.module.Grid import GridInNumpy
 
 
-
-class TestAlgorithmAstar(unittest.TestCase):
+class TestAlgorithmAstarNumpy(unittest.TestCase):
 
     def test_grid_access(self):
         """ Testing if the grid is stored accordingly """
         rows = 10
         cols = 10
 
-        g = grid_factory(rows, cols)
-        start = g[(0, 0)]
-        end = g[(cols - 1, rows - 1)]
-        a_star = AStar(g, start, end)
-
-        self.assertEqual(g, a_star.grid)
+        g = GridInNumpy(rows, cols)
+        start = g.array[0, 0]
+        end = g[cols - 1, rows - 1]
+        a_star = AstarNumpy(g, start, end)
+        self.assertEqual(g.array.any(), a_star.grid.array.any())
 
     def test_grid_start_access(self):
         """ Testing if the astar start location is stored accordingly """
         rows = 10
         cols = 10
 
-        g = grid_factory(rows, cols)
-        start = g[(0, 0)]
-        end = g[(cols - 1, rows - 1)]
-        a_star = AStar(g, start, end)
+        g = GridInNumpy(rows, cols)
+        start = g.array[0, 0]
+        end = g[cols - 1, rows - 1]
+        a_star = AstarNumpy(g, start, end)
 
         self.assertEqual(start, a_star.start)
 
@@ -35,10 +33,10 @@ class TestAlgorithmAstar(unittest.TestCase):
         rows = 10
         cols = 10
 
-        g = grid_factory(rows, cols)
-        start = g[(0, 0)]
-        end = g[(cols - 1, rows - 1)]
-        a_star = AStar(g, start, end)
+        g = GridInNumpy(rows, cols)
+        start = g.array[0, 0]
+        end = g[cols - 1, rows - 1]
+        a_star = AstarNumpy(g, start, end)
 
         self.assertEqual(end, a_star.end)
 
@@ -47,8 +45,8 @@ class TestAlgorithmAstar(unittest.TestCase):
         rows = 10
         cols = 10
 
-        g = grid_factory(rows, cols)
-        a_star = AStar(g)
+        g = GridInNumpy(rows, cols)
+        a_star = AstarNumpy(g)
 
         self.assertEqual(False, a_star.run_check())
 
@@ -57,10 +55,10 @@ class TestAlgorithmAstar(unittest.TestCase):
         rows = 10
         cols = 10
 
-        g = grid_factory(rows, cols)
+        g = GridInNumpy(rows, cols)
 
-        start = g[(0, 0)]
-        a_star = AStar(g, start)
+        start = g[0, 0]
+        a_star = AstarNumpy(g, start)
 
         self.assertEqual(False, a_star.run_check())
 
@@ -69,12 +67,9 @@ class TestAlgorithmAstar(unittest.TestCase):
         rows = 10
         cols = 10
 
-        g = grid_factory(rows, cols)
+        g = GridInNumpy(rows, cols)
 
-        start = g[(0, 0)]
-        end = g[(cols - 1, rows - 1)]
-        a_star = AStar(g, start, end)
-
+        a_star = AstarNumpy(g, (0, 0), (cols - 1, rows - 1))
         self.assertEqual(True, a_star.run_check())
 
     def test_astar_solve_run_check_correct(self):
@@ -83,10 +78,10 @@ class TestAlgorithmAstar(unittest.TestCase):
         rows = 10
         cols = 10
 
-        g = grid_factory(rows, cols)
+        g = GridInNumpy(rows, cols)
 
-        start = g[(0, 0)]
-        a_star = AStar(g, start)
+        start = g.array[0, 0]
+        a_star = AstarNumpy(g, start)
 
         self.assertEqual(None, a_star.solve())
 
@@ -95,14 +90,22 @@ class TestAlgorithmAstar(unittest.TestCase):
         rows = 10
         cols = 10
 
-        g = grid_factory(rows, cols)
+        g = GridInNumpy(rows, cols)
 
-        start = g[(0, 0)]
-        end = g[(cols - 1, rows - 1)]
-        a_star = AStar(g, start, end)
+        a_star = AstarNumpy(g, (0, 0), (cols - 1, rows - 1))
 
-        expected_path = [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8], [9, 9]]
-
+        expected_path = [
+            (
+                0, 0), (
+                1, 1), (
+                2, 2), (
+                3, 3), (
+                4, 4), (
+                5, 5), (
+                6, 6), (
+                7, 7), (
+                8, 8), (
+                9, 9)]
         self.assertEqual(expected_path, a_star.solve())
 
     def test_astar_filled_run(self):
@@ -110,7 +113,7 @@ class TestAlgorithmAstar(unittest.TestCase):
         rows = 10
         cols = 10
 
-        g = grid_factory(rows, cols)
+        g = GridInNumpy(rows, cols)
         occupancy = [[False, True, True, False, True, True, True, False, False, True],
                      [True, False, True, True, True, False, True, True, False, True],
                      [True, False, True, False, True, True, True, False, False, True],
@@ -124,16 +127,22 @@ class TestAlgorithmAstar(unittest.TestCase):
 
         for x in range(rows - 1):
             for y in range(cols - 1):
-                g[(x, y)].set_accessible(occupancy[x][y])
+                if occupancy[x][y] is False:
+                    g.array[x, y] = 1
 
-        start = g[(0, 0)]
+        a_star = AstarNumpy(g, (0, 0), (cols - 1, rows - 1))
 
-        end = g[(cols - 9, rows - 1)]
-
-        a_star = AStar(g, start, end)
-
-        expected_path = [[0, 0], [0, 1], [1, 2], [1, 3], [1, 4], [2, 5], [2, 6], [3, 7], [3, 8], [3, 9], [2, 9], [1, 9]]
-
+        expected_path = [(0, 0),
+                         (0, 1),
+                         (1, 2),
+                         (2, 2),
+                         (3, 3),
+                         (4, 4),
+                         (5, 5),
+                         (6, 6),
+                         (7, 7),
+                         (8, 8),
+                         (9, 9)]
         self.assertEqual(expected_path, a_star.solve())
 
     def test_astar_impossible_run(self):
@@ -142,16 +151,12 @@ class TestAlgorithmAstar(unittest.TestCase):
         rows = 10
         cols = 10
 
-        g = grid_factory(rows, cols)
+        g = GridInNumpy(rows, cols)
 
         for x in range(rows - 1):
             for y in range(cols - 1):
-                g[(x, y)].set_accessible(False)
+                g.array[x][y] = 1
 
-        start = g[(0, 0)]
-
-        end = g[(cols - 9, rows - 1)]
-
-        a_star = AStar(g, start, end)
+        a_star = AstarNumpy(g, (0, 0), (cols - 1, rows - 1))
 
         self.assertEqual(a_star.solve(), False)

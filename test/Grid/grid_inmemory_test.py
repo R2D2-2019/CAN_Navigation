@@ -2,6 +2,7 @@ import unittest
 from modules.CAN_Navigation.module.Grid import GridInMemory
 
 
+
 class TestGridInMemory(unittest.TestCase):
     """
     Basic test class for the in memory grid. Most grid classes will cohere to this basic implementation.
@@ -128,8 +129,6 @@ class TestGridInMemory(unittest.TestCase):
                 duplicates = True
 
         self.assertEqual(False, duplicates)
-
-    # TODO: Dynamic allocation
 
     def test_neighbour_bottom_limit_GridInMemory(self):
         """ Testing if the neighbour for the [0][limit] index position is working as expected """

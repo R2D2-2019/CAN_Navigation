@@ -2,6 +2,7 @@ import unittest
 from modules.CAN_Navigation.module.Grid import CellInMemory
 
 
+
 class TestCellInMemory(unittest.TestCase):
     """
     Basic test class for the in memory cell. Most cell classes will cohere to this basic implementation.

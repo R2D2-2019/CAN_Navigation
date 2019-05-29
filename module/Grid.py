@@ -1,5 +1,6 @@
 from modules.CAN_Navigation.module.FileStorage import FileStorage
 from modules.CAN_Navigation.module.Cell import CellInMemory, CellInFile
+import numpy as np
 
 
 def cell_factory(instance, x, y, f=0, g=0, h=0):
@@ -38,8 +39,6 @@ class Grid:
 
 
 class GridInMemory(Grid):
-
-    # TODO: Make it a data class
 
     def __init__(
             self,
@@ -113,6 +112,34 @@ class GridInMemory(Grid):
         return text
 
 
+class GridInNumpy(Grid):
+    """The GridInNumpy has less functions, this has to do with Numpy doing the heavy lifting. """
+
+    def __init__(self, columns, rows):
+        Grid.__init__(self, columns, rows)
+
+        # Numpy has a function that allows us to set the default value (zero) and make a NumPy array out of it.
+        self.array = np.zeros((columns, rows), dtype=int)
+
+
+    def get_neighbours(self, cell):
+        """Numpy way of returning the expected structure"""
+
+        """Side note, numpy will catch this if impossible, we don't have to worry about it.
+        We can simply use all the possible outcomes, we don't need to catch it using a series of if statements.
+        I've initially done these values in a loop, but it's a waste of doing so considering they're static.
+        """
+        possible_neighbours = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
+
+        # Initialising our soon-to-be return type.
+        neighbours = list()
+
+        # Appending the possibilities based on the cell index to return the possible neighbours.
+        for x, y in possible_neighbours:
+            neighbours.append((cell[0] + x, cell[1] + y))
+        return neighbours
+
+
 class GridInFile(GridInMemory):
 
     def __init__(self, columns=0, rows=0, file_storage=None):
@@ -162,13 +189,11 @@ class GridInFile(GridInMemory):
 
         neighbour_index = self.get_neighbours_indexes(cell)  # Redirecting the call to the super.
         neighbours = list()
-        # TODO: Solve indexes that are empty arrays
         neighbour_index = [x for x in neighbour_index if x != []]  # Unsure what causes empty lists
         for x, y in neighbour_index:
             neighbours.append(CellInFile(self.file_storage, x, y, read=True))
         return neighbours
 
-    # TODO: Perhaps the set and get functions from the structure    and cell should be static.
     def get_file_content(self):
         """ Getting the content from a file and storing it in the object.
         """
