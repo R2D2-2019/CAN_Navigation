@@ -75,14 +75,6 @@ class GridInMemory(Grid):
             cell.neighbours.append([cell.x, cell.y + 1])
         if cell.y > 0:
             cell.neighbours.append([cell.x, cell.y - 1])
-        if cell.x > 0 and cell.y > 0:
-            cell.neighbours.append([cell.x - 1, cell.y - 1])
-        if cell.x < self.rows - 1 and cell.y > 0 and cell.x:
-            cell.neighbours.append([cell.x + 1, cell.y - 1])
-        if cell.x > 0 and cell.y < self.columns - 1 and cell.y:
-            cell.neighbours.append([cell.x - 1, cell.y - 1])
-        if cell.x < self.rows - 1 and cell.y < self.columns - 1:
-            cell.neighbours.append([cell.x + 1, cell.y + 1])
         return cell.neighbours
 
     # Based on the neighbour indexes, acquiring the cell objects
