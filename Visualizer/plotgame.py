@@ -1,5 +1,6 @@
 import pygame as pg
 import numpy as np
+import pickle as pickle
 from rectangle import Rectangle
 from modules.CAN_Navigation.module.Algorithms import AStar
 from modules.CAN_Navigation.module.Grid import grid_factory
@@ -49,16 +50,11 @@ def main():
     npblocks = np.array(blocks)
     del blocks
 
-    npblocks = loadmap()
-
-
     # create a sprite group to reduce draw calls
     rects = pg.sprite.Group()
     for row in npblocks:
         for rect in row:
             rects.add(rect)
-
-
 
     # poll events
     while True:
@@ -121,41 +117,39 @@ def main():
                         for block in row:
                             block.reset()
 
+                if event.key == pg.K_o:
+                    print("Saving map")
+                    grid = grid_factory(GRID_SIZE, GRID_SIZE)
+                    save_map(npblocks,grid)
+
             # rectangle draw calls and pygame updates
             display.fill((240, 240, 240))
             rects.draw(display)
             pg.display.flip()
 
-#demo load map function
-def loadmap():
-    # grid size is fixed , tried 200x200 but it's really slow
-    grid = grid_factory(GRID_SIZE, GRID_SIZE)
-    algo = AStar(grid)
+
+#send the created map to mapping_2d
+def save_map(npblocks,grid):
+    #all the obsticals in the grid
+    obstacle ={}
+    
+    for x in range(grid.rows):
+        for y in range(grid.columns):
+            if npblocks[y, x].obstacle:     #check if there is a object
+                if y in obstacle:           #check if it exist in the list
+                    obstacle[y].append(x)
+                else:
+                    obstacle[y] = [x]
+    
+    #starting the saving process
+    data_save = {'grid':grid, 'obsticals':obstacle}
+
+    with open('data.map', 'wb') as f:
+        pickle.dump(data_save, f, pickle.HIGHEST_PROTOCOL)
 
 
-    # init pygame and open a white window thats 1000x1000 res
-    width, height = 1000, 1000
-
-    # determine how big the blocks need to be
-    block_w, block_h = width/grid.rows, height/grid.columns
-
-     # fill blocks (2D list of lists)
-    blocks = list()
-    for x in range(0, width+1, int(block_w)):
-        blocks.append(list())
-        for y in range(0, height+1, int(block_h)):
-            b = Rectangle((x, y), (block_w, block_h))
-            blocks[-1].append(b)
-
-    # create a numpy array based on the (slow) python list of lists
-    npblocks = np.array(blocks)
-    del blocks
-
-    for row in npblocks:
-                    for block in row:
-                        #if block.rect.collidepoint(mouse_pos):
-                        block.mark_obstacle()
-
-    return npblocks
 
 main()
+
+
+
