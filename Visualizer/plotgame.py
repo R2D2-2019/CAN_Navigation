@@ -120,19 +120,28 @@ def main():
                 if event.key == pg.K_o:
                     print("Saving map")
                     grid = grid_factory(GRID_SIZE, GRID_SIZE)
-                    save_map(npblocks,grid)
+                    if save_map(npblocks,grid):
+                       print("Save compleet")
+                    else:
+                       print("Save faild")
 
+                if event.key == pg.K_l:
+                    print("load map")
+                    load_map()
+                    
             # rectangle draw calls and pygame updates
             display.fill((240, 240, 240))
             rects.draw(display)
             pg.display.flip()
 
 
-#send the created map to mapping_2d
+#save the created map
 def save_map(npblocks,grid):
-    #all the obsticals in the grid
-    obstacle ={}
     
+    obstacle = {}
+    gird_size = [grid.rows,grid.columns]
+
+
     for x in range(grid.rows):
         for y in range(grid.columns):
             if npblocks[y, x].obstacle:     #check if there is a object
@@ -141,12 +150,24 @@ def save_map(npblocks,grid):
                 else:
                     obstacle[y] = [x]
     
-    #starting the saving process
-    data_save = {'grid':grid, 'obsticals':obstacle}
-
+    #saving data to the a file
     with open('data.map', 'wb') as f:
-        pickle.dump(data_save, f, pickle.HIGHEST_PROTOCOL)
+        pickle.dump({'grid':gird_size, 'obsticals':obstacle}, f, pickle.HIGHEST_PROTOCOL)
 
+    return True
+
+def load_map():
+    #trying loading the map
+    try:
+        with open('data.map', 'rb') as f:
+            map_file = pickle.load(f)
+    except: #file not found or a other error return false
+        return False
+
+    grid_size = map_file['grid']
+    obsticals = map_file['obsticals']
+  
+    #placing grid
 
 
 main()
