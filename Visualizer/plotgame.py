@@ -61,14 +61,16 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 exit(0)
-
-            # if we press m1 we check what block the cursor is on and mark it as an obstacle
+        
+        #if we press m1 we check what block the cursor is on and mark it as an obstacle
             if pg.mouse.get_pressed()[0]:
                 mouse_pos = pg.mouse.get_pos()
+                
                 for row in npblocks:
                     for block in row:
                         if block.rect.collidepoint(mouse_pos):
                             block.mark_obstacle()
+
 
             if event.type == pg.KEYDOWN:
                 mouse_pos = pg.mouse.get_pos()
@@ -96,6 +98,7 @@ def main():
                         for x in range(grid.rows):
                             for y in range(grid.columns):
                                 if npblocks[y, x].obstacle:
+
                                     grid[(x, y)].accessible = False
 
                         # calculate a path
@@ -127,8 +130,20 @@ def main():
 
                 if event.key == pg.K_l:
                     print("load map")
-                    load_map()
-                    
+                    map_file = load_map()
+                    if map_file:
+                        grid_size = map_file['grid']
+                        obsticals_map = map_file['obsticals']
+                       
+                        #loop
+                        for y in obsticals_map:
+                            for x in obsticals_map[y]:
+                                npblocks[y, x].set_color((0, 0, 0))
+                                npblocks[y, x].mark_obstacle()
+
+                        
+                                
+
             # rectangle draw calls and pygame updates
             display.fill((240, 240, 240))
             rects.draw(display)
@@ -144,30 +159,27 @@ def save_map(npblocks,grid):
 
     for x in range(grid.rows):
         for y in range(grid.columns):
-            if npblocks[y, x].obstacle:     #check if there is a object
-                if y in obstacle:           #check if it exist in the list
-                    obstacle[y].append(x)
+            if npblocks[y, x].obstacle:     #check if there is a obstacle on y,x cordinat 
+                if y in obstacle:           
+                    obstacle[y].append(x)   #add an x codinat to the y cordinat
                 else:
-                    obstacle[y] = [x]
+                    obstacle[y] = [x]       #make a new x codinats list for a y cordinat key
+
     
-    #saving data to the a file
+    #save list to a bitmap file
     with open('data.map', 'wb') as f:
-        pickle.dump({'grid':gird_size, 'obsticals':obstacle}, f, pickle.HIGHEST_PROTOCOL)
+        pickle.dump({'grid':gird_size, 'obsticals':obstacle}, f, pickle.HIGHEST_PROTOCOL)  
 
     return True
 
+#save old created map
 def load_map():
-    #trying loading the map
-    try:
-        with open('data.map', 'rb') as f:
-            map_file = pickle.load(f)
-    except: #file not found or a other error return false
+    try: #try catch to load the map 
+        with open('data.map', 'rb') as f: #load map
+            return pickle.load(f)
+    except: #file not found
         return False
 
-    grid_size = map_file['grid']
-    obsticals = map_file['obsticals']
-  
-    #placing grid
 
 
 main()
