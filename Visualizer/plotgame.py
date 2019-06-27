@@ -131,15 +131,7 @@ def main():
                 if event.key == pg.K_l:
                     print("load map")
                     map_file = load_map()
-                    if map_file:
-                        grid_size = map_file['grid']
-                        obsticals_map = map_file['obsticals']
-                       
-                        #loop
-                        for y in obsticals_map:
-                            for x in obsticals_map[y]:
-                                npblocks[y, x].set_color((0, 0, 0))
-                                npblocks[y, x].mark_obstacle()
+                    draw_map(map_file, npblocks)
 
                         
                                 
@@ -180,7 +172,18 @@ def load_map():
     except: #file not found
         return False
 
+def draw_map(map,npblocks):
+    if not map:
+        return False
 
+    obsticals_map = map['obsticals']
+    
+    #loop true all the objects on the grid
+    for y in obsticals_map:
+        for x in obsticals_map[y]:
+            npblocks[y, x].mark_obstacle()      #place mark the obstacle on the map
+    
+    return True
 
 main()
 
