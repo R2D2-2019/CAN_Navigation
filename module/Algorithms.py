@@ -72,7 +72,7 @@ class AStar(PathfindingAlgorithm):
         self.current_cell = None
         
 
-        self.l_index = 0
+        self.l_index, self.old_l_index = 0 , 0
         # These lists are empty by default
         self.open_set, self.closed_set = list(), list()
 
@@ -94,6 +94,14 @@ class AStar(PathfindingAlgorithm):
         else:
             return None
 
+    def solve_alternative(self):
+        """:returns list | bool  """
+        if self.run_check():
+            return self.run_alternative()
+        else:
+            return None   
+
+
     def run_check(self):
         """
         Done to validate if the main run function can be called (all variables present)
@@ -103,15 +111,23 @@ class AStar(PathfindingAlgorithm):
             return False
         return True
 
-    def reconstruct_path(self):
+    def reconstruct_path(self, alternative_path = False):
         """
         Starting at the last index, looping backwards to finding the path and adding to a list.
         List is reversed in the end.
         :return: List: The Path
         """
-        self.path = []
-        temp = self.open_set[self.l_index]
+        self.path = []       
 
+        #output alternative path
+        if alternative_path:
+            for temp in self.path_alternative:
+                self.path.append(temp.get_x_y())
+            self.path.reverse()                  
+            return self.path
+        
+        #output normal path
+        temp = self.open_set[self.l_index]
         if isinstance(temp.previous, list):
             self.path = temp.previous
             self.path.reverse()
@@ -186,49 +202,37 @@ class AStar(PathfindingAlgorithm):
                 in_set = True
         return in_set
 
-    def closed_path(self, path):
-       
-        #print(len(path), end = " path lengt \n")
+    def nearest_path(self, path):
+        """
+        This function is keeping the path that is closet to the end poin.
 
-        closed = []
+        :return: None
+        """      
+        nearest = []
         temp = path
         
-        #print(temp[-1].get_content()['f'],temp[-1].get_content()['h'],temp[-1].get_x_y(), end=' distance to end \n')
-
-         
         #first run of this function
         if not self.path_alternative:
             self.path_alternative = temp[:]
-            print("first")
             return
         
 
-        distance_old = self.path_alternative[-1].get_content()['h']
-        distance = temp[-1].get_content()['h'] #Heuristic based distance to end
+        distance_old = self.path_alternative[-1].get_content()['f']
+        distance = temp[-1].get_content()['f'] #Heuristic based distance to end
         
 
         if distance < distance_old and distance is not 0 or distance_old is 0:
             self.path_alternative = temp[:]
-            print("save" , distance)
-        else:
-            print('path not closer', distance , distance_old)
-        '''
-        #self.path_alternative = []
 
-        
-        if isinstance(temp.previous, list):
-            closed = temp.previous
-            closed.reverse()
-            closed.append(temp.get_x_y())
-        else:
-            while hasattr(temp, 'previous'):
-                closed.append(temp.get_x_y())
-                temp = temp.previous
-            closed.reverse()
-        print(*closed)
-        #return self.path
-        #print(*path, end = " end path \n")
-        '''
+ 
+    def run_alternative(self):
+        """
+            This function start building the alternative path
+            
+            :return: list path
+        """
+        self.reconstruct_path(True)
+        return self.path
 
     def run(self):
         """
@@ -241,7 +245,6 @@ class AStar(PathfindingAlgorithm):
             self.iteration_start()
             self.get_lowest_index_open_set()
             if self.found_check():  # If we've found our goal, ready to finalize
-                self.closed_path(self.open_set)
                 self.reconstruct_path()
                 self.iteration_path_found()
                 return self.path  # return with a path reconstruct function call
@@ -268,7 +271,7 @@ class AStar(PathfindingAlgorithm):
                         cell.set_previous(self.open_set[self.l_index])                      
             
             self.closed_set.append(self.open_set[self.l_index])
-            self.closed_path(self.open_set)
+            self.nearest_path(self.open_set)
             # ensuring that we don't come across the same element again
             del self.open_set[self.l_index]
             self.iteration_end()
@@ -325,6 +328,7 @@ class AstarNumpy(AStar):
             return self.run()
         else:
             return None
+        
 
     def found_check(self):
         """

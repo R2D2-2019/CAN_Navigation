@@ -101,6 +101,11 @@ class CellInMemory(AstarCell):
         return [self.x, self.y]
 
     def get_content(self):
+        """
+            Getting the Heuristic contents of the cell
+                Returns:
+                    dict: Returns all the heuristic
+        """
         return {'f':self.f, 'h':self.h, 'g':self.g}
 
 def generate_file_name(x, y):

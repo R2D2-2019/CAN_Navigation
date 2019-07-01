@@ -104,17 +104,19 @@ def main():
                         # calculate a path
                         compleet = algo.solve()
 
-                        print(compleet, end=' algo \n')
-
                         if compleet:
-                            
                             # remove start(twice) and end node from the path
                             algo.path.pop()
                             algo.path.pop(0)
+                        else:
+                            compleet = algo.solve_alternative()   
 
-                            # color the path yellow
-                            for v2 in algo.path:
-                                npblocks[v2[1], v2[0]].set_color((0, 255, 255))
+
+                        # color the path yellow
+                        for v2 in algo.path:
+                            npblocks[v2[1], v2[0]].set_color((0, 255, 255))
+
+                        npblocks[algo.path[0][1], algo.path[0][0]].set_color((0, 0, 255))
 
 
                 # if we press c we clear all variables and reset the grid and blocks
@@ -124,7 +126,8 @@ def main():
                     for row in npblocks:
                         for block in row:
                             block.reset()
-
+                
+                #save the created map
                 if event.key == pg.K_o:
                     print("Saving map")
                     grid = grid_factory(GRID_SIZE, GRID_SIZE)
@@ -133,6 +136,7 @@ def main():
                     else:
                        print("Save faild")
 
+                #load a saved path
                 if event.key == pg.K_l:
                     print("load map")
                     map_file = load_map()
