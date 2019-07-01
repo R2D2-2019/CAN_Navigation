@@ -23,6 +23,9 @@ class AstarCell(Cell):
 
     def get_x_y(self):
         pass
+    
+    def get_content(self):
+        pass
 
     def set_accessible(self, state):
         pass
@@ -97,6 +100,8 @@ class CellInMemory(AstarCell):
         """
         return [self.x, self.y]
 
+    def get_content(self):
+        return {'f':self.f, 'h':self.h, 'g':self.g}
 
 def generate_file_name(x, y):
     return str(x) + "_" + str(y) + ".json"

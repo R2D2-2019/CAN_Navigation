@@ -68,7 +68,9 @@ class AStar(PathfindingAlgorithm):
         self.end = end
         self.start = start
         self.path = []
+        self.path_alternative = []
         self.current_cell = None
+        
 
         self.l_index = 0
         # These lists are empty by default
@@ -81,6 +83,8 @@ class AStar(PathfindingAlgorithm):
     def continuation_check(self):
         """ Checking if we can still continue searching """
         return True if self.open_set else False
+
+
 
     def solve(self):
         """ :returns list | bool """
@@ -126,6 +130,9 @@ class AStar(PathfindingAlgorithm):
         :return: True if we can access it false if we can't
         """
         return True if not self.in_set(cell, self.closed_set) and cell.accessible else False
+
+
+
 
     def get_lowest_index_open_set(self):
         """
@@ -179,6 +186,50 @@ class AStar(PathfindingAlgorithm):
                 in_set = True
         return in_set
 
+    def closed_path(self, path):
+       
+        #print(len(path), end = " path lengt \n")
+
+        closed = []
+        temp = path
+        
+        #print(temp[-1].get_content()['f'],temp[-1].get_content()['h'],temp[-1].get_x_y(), end=' distance to end \n')
+
+         
+        #first run of this function
+        if not self.path_alternative:
+            self.path_alternative = temp[:]
+            print("first")
+            return
+        
+
+        distance_old = self.path_alternative[-1].get_content()['h']
+        distance = temp[-1].get_content()['h'] #Heuristic based distance to end
+        
+
+        if distance < distance_old and distance is not 0 or distance_old is 0:
+            self.path_alternative = temp[:]
+            print("save" , distance)
+        else:
+            print('path not closer', distance , distance_old)
+        '''
+        #self.path_alternative = []
+
+        
+        if isinstance(temp.previous, list):
+            closed = temp.previous
+            closed.reverse()
+            closed.append(temp.get_x_y())
+        else:
+            while hasattr(temp, 'previous'):
+                closed.append(temp.get_x_y())
+                temp = temp.previous
+            closed.reverse()
+        print(*closed)
+        #return self.path
+        #print(*path, end = " end path \n")
+        '''
+
     def run(self):
         """
         The main implementation of the A* algorithm. Recommend reading the Wikipedia pseudo-code to understand it.
@@ -190,9 +241,11 @@ class AStar(PathfindingAlgorithm):
             self.iteration_start()
             self.get_lowest_index_open_set()
             if self.found_check():  # If we've found our goal, ready to finalize
+                self.closed_path(self.open_set)
                 self.reconstruct_path()
                 self.iteration_path_found()
                 return self.path  # return with a path reconstruct function call
+
             self.current_cell = self.open_set[self.l_index]
             neighbours = self.grid.get_neighbours(self.current_cell)
             self.iteration_neighbours(neighbours)
@@ -212,12 +265,15 @@ class AStar(PathfindingAlgorithm):
                     if new_path:
                         cell.h = calculate_heuristic(cell, self.end)
                         cell.f = cell.g + cell.h
-                        cell.set_previous(self.open_set[self.l_index])
+                        cell.set_previous(self.open_set[self.l_index])                      
             
             self.closed_set.append(self.open_set[self.l_index])
+            self.closed_path(self.open_set)
             # ensuring that we don't come across the same element again
             del self.open_set[self.l_index]
             self.iteration_end()
+            
+
         self.iteration_no_path_found()
         return False
 

@@ -102,15 +102,20 @@ def main():
                                     grid[(x, y)].accessible = False
 
                         # calculate a path
-                        algo.solve()
+                        compleet = algo.solve()
 
-                        # remove start(twice) and end node from the path
-                        algo.path.pop()
-                        algo.path.pop(0)
+                        print(compleet, end=' algo \n')
 
-                        # color the path yellow
-                        for v2 in algo.path:
-                            npblocks[v2[1], v2[0]].set_color((0, 255, 255))
+                        if compleet:
+                            
+                            # remove start(twice) and end node from the path
+                            algo.path.pop()
+                            algo.path.pop(0)
+
+                            # color the path yellow
+                            for v2 in algo.path:
+                                npblocks[v2[1], v2[0]].set_color((0, 255, 255))
+
 
                 # if we press c we clear all variables and reset the grid and blocks
                 if event.key == pg.K_c:
