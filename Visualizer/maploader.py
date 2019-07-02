@@ -30,15 +30,31 @@ def load_map():
     except: #file not found
         return False
 
-def draw_map(map,npblocks):
-    if not map:
+def draw_map(map,npblocks, grid_size, start_position):
+    if not map :
         return False
+    
+    if not start_position: #if there is no starting position just make it 0
+        start_position = [0,0]
 
     obsticals_map = map['obsticals']
-    
+    end_map_position = [start_position[0] + grid_size, start_position[1] + grid_size]
+
+    print(start_position, end_map_position)
+
+    for y in range(start_position[0], end_map_position[0]):
+        for x in range(start_position[1], end_map_position[1]):
+            if x in obsticals_map[y]:
+                place_y = y - start_position[0]
+                place_x = x - start_position[1]
+                npblocks[place_y, place_x].mark_obstacle()      #place mark the obstacle on the map
+            #if obsticals_map[y][x]:
+            #    
+    return True
+'''
     #loop true all the objects on the grid
     for y in obsticals_map:
         for x in obsticals_map[y]:
             npblocks[y, x].mark_obstacle()      #place mark the obstacle on the map
+'''  
     
-    return True

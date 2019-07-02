@@ -6,8 +6,12 @@ from modules.CAN_Navigation.module.Algorithms import AStar
 from modules.CAN_Navigation.module.Grid import grid_factory
 from modules.CAN_Navigation.Visualizer.maploader import *
 # square shaped grids' fixed width/height
-GRID_SIZE = 20
+GRID_SIZE = 30
 
+
+#this is al demo code 
+start_position = [0,0]  
+end_found      = False
 
 def main():
     """
@@ -16,6 +20,8 @@ def main():
     Checks for mouse and keyboard input, marks rectangles as obstacles on mouse click.
     Uses keyboard input; S, E, Space, C to mark start and end, space to find a path and
     C to clear the screen/start over.
+    O is to save the map.
+    L is to load the map
 
     TODO: Big GRID_SIZE numbers may cause slow down (marking obstacles too fast skips rectangles),
     not sure if it's the application or something inherent to pygame.
@@ -23,7 +29,8 @@ def main():
     """
 
     print("click to mark obstacles.")
-    print("S: mark start. \nE: mark end. \nSpace: plot path. \nC: clear all.")
+    print("S: mark start. \nE: mark end. \nSpace: plot path. \nC: clear all. \nO is to save the map.\nL is to load the map")
+    print("Right arrow is next step")
 
     # grid size is fixed , tried 200x200 but it's really slow
     grid = grid_factory(GRID_SIZE, GRID_SIZE)
@@ -88,14 +95,21 @@ def main():
                             if block.rect.collidepoint(mouse_pos):
                                 algo.end = grid[(x, y)]
                                 block.mark_end()
+
                 # if we press space for the first time we map obstacles to the grid and get a path
                 if event.key == pg.K_SPACE:
                     for x in range(grid.rows):
                         for y in range(grid.columns):
                             if npblocks[y, x].obstacle:
                                 grid[(x, y)].accessible = False
-                    algo = calculate_rout(algo, grid)
+                    algo = calculate_rout(algo, grid, 0)
                     color_path(algo, npblocks)
+                    if end_found:
+                        print("found the end of the route")
+                    else:
+                        print("did not find the end")
+                        change_end(algo.path[-1])
+
 
                 # if we press c we clear all variables and reset the grid and blocks
                 if event.key == pg.K_c:
@@ -114,11 +128,21 @@ def main():
                     else:
                        print("Save faild")
 
-                #load a saved path
+                #load a saved map
                 if event.key == pg.K_l:
                     print("load map")
                     map_file = load_map()
-                    draw_map(map_file, npblocks)
+                    #grid = grid_factory(GRID_SIZE, GRID_SIZE)
+                    #algo = AStar(grid)
+                        
+
+                    #clean up the screen
+                    for row in npblocks:
+                        for block in row:
+                            block.reset()  
+
+                    draw_map(map_file, npblocks, GRID_SIZE, start_position)
+
 
                         
                                 
@@ -127,24 +151,33 @@ def main():
             display.fill((240, 240, 240))
             rects.draw(display)
             pg.display.flip()
-            
 
-def calculate_rout(algo, grid):
+def change_end(new_path):
+    global start_position
+    start_position = [new_path[1]-2,new_path[0]-2]
+    #start_position = new_path
+    
+
+def calculate_rout(algo, grid, loop):
+    global end_found
+
     if not algo.path:
         # ignore key press when either start or end isn't marked
         if not algo.start or not algo.end:
             return False
         
-        print(algo.end.get_x_y(), algo.start.get_x_y(), end=' nr 1 \n')
+        #print(algo.end.get_x_y(), algo.start.get_x_y(), end=' nr 1 \n')
 
 
         # calculate a path
         compleet_algo = algo.solve()
 
         if compleet_algo:
-            # remove start(twice) and end node from the path
-            #algo.path.pop()
-            #algo.path.pop(0)
+            if loop is 0:
+                end_found = True
+                algo.path.pop()
+                algo.path.pop(0)
+
             return algo
         
         compleet_algo = algo.solve_alternative()
@@ -158,7 +191,7 @@ def calculate_rout(algo, grid):
         
 
 
-        return calculate_rout(algo, grid)
+        return calculate_rout(algo, grid, 1 )
     return False
 
 
