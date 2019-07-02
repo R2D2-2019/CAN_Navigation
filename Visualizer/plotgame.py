@@ -90,34 +90,12 @@ def main():
                                 block.mark_end()
                 # if we press space for the first time we map obstacles to the grid and get a path
                 if event.key == pg.K_SPACE:
-                    if not algo.path:
-                        # ignore key press when either start or end isn't marked
-                        if not algo.start or not algo.end:
-                            continue
-
-                        for x in range(grid.rows):
-                            for y in range(grid.columns):
-                                if npblocks[y, x].obstacle:
-
-                                    grid[(x, y)].accessible = False
-
-                        # calculate a path
-                        compleet = algo.solve()
-
-                        if compleet:
-                            # remove start(twice) and end node from the path
-                            algo.path.pop()
-                            algo.path.pop(0)
-                        else:
-                            compleet = algo.solve_alternative()   
-
-
-                        # color the path yellow
-                        for v2 in algo.path:
-                            npblocks[v2[1], v2[0]].set_color((0, 255, 255))
-
-                        npblocks[algo.path[0][1], algo.path[0][0]].set_color((0, 0, 255))
-
+                    for x in range(grid.rows):
+                        for y in range(grid.columns):
+                            if npblocks[y, x].obstacle:
+                                grid[(x, y)].accessible = False
+                    algo = calculate_rout(algo, grid)
+                    color_path(algo, npblocks)
 
                 # if we press c we clear all variables and reset the grid and blocks
                 if event.key == pg.K_c:
@@ -149,9 +127,54 @@ def main():
             display.fill((240, 240, 240))
             rects.draw(display)
             pg.display.flip()
+            
+
+def calculate_rout(algo, grid):
+    if not algo.path:
+        # ignore key press when either start or end isn't marked
+        if not algo.start or not algo.end:
+            return False
+        
+        print(algo.end.get_x_y(), algo.start.get_x_y(), end=' nr 1 \n')
 
 
+        # calculate a path
+        compleet_algo = algo.solve()
 
+        if compleet_algo:
+            # remove start(twice) and end node from the path
+            #algo.path.pop()
+            #algo.path.pop(0)
+            return algo
+        
+        compleet_algo = algo.solve_alternative()
+        new_end = algo.path[0]
+        tmp_start = algo.start
+
+        algo = AStar(grid)
+        algo.end = grid[(new_end[0],new_end[1])]
+        algo.start = tmp_start
+
+        
+
+
+        return calculate_rout(algo, grid)
+    return False
+
+
+def color_path(algo, npblocks):
+        # color the path 
+        if  algo:
+            i = 0
+            for value in algo.path:
+                if i is 0:
+                    npblocks[value[1], value[0]].set_color((0, 255, 0))
+                elif i is len(algo.path)-1:
+                    npblocks[value[1], value[0]].set_color((255, 0, 0))
+                else:
+                    npblocks[value[1], value[0]].set_color((0, 255, 255))
+
+                i += 1
 
 main()
 

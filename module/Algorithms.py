@@ -70,7 +70,6 @@ class AStar(PathfindingAlgorithm):
         self.path = []
         self.path_alternative = []
         self.current_cell = None
-        
 
         self.l_index, self.old_l_index = 0 , 0
         # These lists are empty by default
