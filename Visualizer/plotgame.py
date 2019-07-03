@@ -132,8 +132,8 @@ def main():
                 if event.key == pg.K_l:
                     print("load map")
                     map_file = load_map()
-                    #grid = grid_factory(GRID_SIZE, GRID_SIZE)
-                    #algo = AStar(grid)
+                    rid = grid_factory(GRID_SIZE, GRID_SIZE)
+                    algo = AStar(grid)
                         
 
                     #clean up the screen
@@ -152,9 +152,10 @@ def main():
             rects.draw(display)
             pg.display.flip()
 
+
 def change_end(new_path):
     global start_position
-    start_position = [new_path[1]-2,new_path[0]-2]
+    start_position = [new_path[0], new_path[1]]
     #start_position = new_path
     
 
@@ -175,8 +176,8 @@ def calculate_rout(algo, grid, loop):
         if compleet_algo:
             if loop is 0:
                 end_found = True
-                algo.path.pop()
-                algo.path.pop(0)
+                #algo.path.pop()
+                #algo.path.pop(0)
 
             return algo
         
