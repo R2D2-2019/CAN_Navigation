@@ -49,7 +49,7 @@ def draw_map(map,npblocks, grid_size, start_position):
 
     for y in range(start_position[1], end_map_position[1]):
         for x in range(start_position[0], end_map_position[0]):
-            if x in obsticals_map[y]:
+            if y in obsticals_map and x in obsticals_map[y]:
                 place_y = y - start_position[1]
                 place_x = x - start_position[0]
                 npblocks[place_y, place_x].mark_obstacle()      #place mark the obstacle on the map

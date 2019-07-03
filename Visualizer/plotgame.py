@@ -6,7 +6,7 @@ from modules.CAN_Navigation.module.Algorithms import AStar
 from modules.CAN_Navigation.module.Grid import grid_factory
 from modules.CAN_Navigation.Visualizer.maploader import *
 # square shaped grids' fixed width/height
-GRID_SIZE = 30
+GRID_SIZE = 70
 
 
 #this is al demo code 
