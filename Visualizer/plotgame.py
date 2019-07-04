@@ -3,6 +3,8 @@ import numpy as np
 from rectangle import Rectangle
 from modules.CAN_Navigation.module.Algorithms import AStar
 from modules.CAN_Navigation.module.Grid import grid_factory
+from modules.CAN_Navigation.module.Algorithms import AStar
+from modules.CAN_Navigation.module.MapStorage import map_storage 
 
 # square shaped grids' fixed width/height
 GRID_SIZE = 60
@@ -27,6 +29,7 @@ def main():
     # grid size is fixed , tried 200x200 but it's really slow
     grid = grid_factory(GRID_SIZE, GRID_SIZE)
     algo = AStar(grid)
+    map_data  = map_storage('./','.map',GRID_SIZE)
 
     # init pygame and open a white window thats 1000x1000 res
     pg.init()
@@ -98,15 +101,23 @@ def main():
                                     grid[(x, y)].accessible = False
 
                         # calculate a path
-                        algo.solve()
+                        compleet = algo.solve()
+
+                        if compleet:
+                            # remove start(twice) and end node from the path
+                            algo.path.pop()
+                            algo.path.pop(0)
+                            # color the path blue ish
+                            for v2 in algo.path:
+                                npblocks[v2[1], v2[0]].set_color((0, 255, 255))                            
+                        else:
+                            compleet = algo.solve_alternative()   
 
                         # remove start(twice) and end node from the path
                         algo.path.pop()
                         algo.path.pop(0)
 
-                        # color the path yellow
-                        for v2 in algo.path:
-                            npblocks[v2[1], v2[0]].set_color((0, 255, 255))
+
 
                 # if we press c we clear all variables and reset the grid and blocks
                 if event.key == pg.K_c:

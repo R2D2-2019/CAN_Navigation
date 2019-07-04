@@ -2,27 +2,33 @@ import pickle as pickle
 
 
 class map_storage:
+    
     def __init__(self, directory_name, file_extention, grid_size):
         self.directory_name = directory_name
         self.file_extention = file_extention
         self.map = None
         self.grid_size = grid_size
 
+    '''
+    file_path
+    set the file path
+    :return: string of the file path
+    '''
     def file_path(self, file_name):
         if not self.directory_name:
             self.directory_name = "./"
         if not self.file_extention:
             self.file_extention = ".map"
         return self.directory_name + file_name + '.' + self.file_extention
-'''
- save 
-    This function saves a map in a bitmap file 
-    input is 
-        npblock: ? , (this are the blocks of the map)
-        gird: list , (the size that the grid is in)
-        name: string , (name of the file)
- :return: bool 
-'''
+    '''
+    save 
+        This function saves a map in a bitmap file 
+        input is 
+            npblock: ? , (this are the blocks of the map)
+            gird: list , (the size that the grid is in)
+            name: string , (name of the file)
+    :return: bool 
+    '''
     def save(self, npblocks ,grid ,file_name ):
         obstacle = {}
         gird_size = [grid.rows,grid.columns]
@@ -42,12 +48,12 @@ class map_storage:
             return False
         
         return True
-'''
-    load_map
-        This function loads the map
-    input is
-        name: string, (the name of the file)
-'''
+    '''
+        load_map
+            This function loads the map
+        input is
+            name: string, (the name of the file)
+    '''
     def load(self, file_name):
         try: #try catch to load the map 
             with open(file_path(file_name), 'rb') as f: #load map
@@ -55,18 +61,22 @@ class map_storage:
                 return self.map
         except: #file not found
             return False        
-
+    '''
+        change_dir
+            change the directory where the file is saved
+        :return: bool
+    '''
     def change_dir(self, directory):
         self.directory_name = directory
         return True
-'''
-    draw_map
-        This function draws a map
-        :input:
-        map is the map that is loaded
-        npblocks is a refrence and used to send the data back
-    :return: bool
-'''    
+    '''
+        draw_map
+            This function draws a map
+            :input:
+            map is the map that is loaded
+            npblocks is a refrence and used to send the data back
+        :return: bool
+    '''    
     def draw(self, npblocks, start_position):
         if not self.map:
             return False
