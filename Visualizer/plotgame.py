@@ -29,7 +29,7 @@ def main():
     # grid size is fixed , tried 200x200 but it's really slow
     grid = grid_factory(GRID_SIZE, GRID_SIZE)
     algo = AStar(grid)
-    map_data  = map_storage('./','.map',GRID_SIZE)
+    map_data  = map_storage('','map',GRID_SIZE)
 
     # init pygame and open a white window thats 1000x1000 res
     pg.init()
@@ -126,6 +126,32 @@ def main():
                     for row in npblocks:
                         for block in row:
                             block.reset()
+
+                #save the created map
+                if event.key == pg.K_o:
+                    print("Saving map")
+                    grid = grid_factory(GRID_SIZE, GRID_SIZE)
+                    if map_data.save(npblocks,grid, 'plotgame'):
+                       print("Save compleet")
+                    else:
+                       print("Save faild")
+
+                #load a saved map
+                if event.key == pg.K_l:
+                    print("load map")
+                    map_file = map_data.load('plotgame')
+                    rid = grid_factory(GRID_SIZE, GRID_SIZE)
+                    algo = AStar(grid)
+                    
+                    #clean up the screen
+                    for row in npblocks:
+                        for block in row:
+                            block.reset()  
+
+                    map_data.draw(map_file,[0,0])
+                    
+                    
+
 
             # rectangle draw calls and pygame updates
             display.fill((240, 240, 240))

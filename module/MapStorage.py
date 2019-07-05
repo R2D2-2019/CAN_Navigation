@@ -22,32 +22,44 @@ class map_storage:
         return self.directory_name + file_name + '.' + self.file_extention
     '''
     save 
-        This function saves a map in a bitmap file 
+        This function will work only for the plotgame file
+        it will save the file that was drawn in the plotgame
         input is 
             npblock: ? , (this are the blocks of the map)
             gird: list , (the size that the grid is in)
             name: string , (name of the file)
     :return: bool 
     '''
-    def save(self, npblocks ,grid ,file_name ):
+    def save_plotgame(self, npblocks ,grid ,file_name ):
         obstacle = {}
         gird_size = [grid.rows,grid.columns]
-
+        
+        
         for x in range(grid.rows):
             for y in range(grid.columns):
-                if npblocks[y, x].obstacle:     #check if there is a obstacle on y,x cordinat 
-                    if y in obstacle:           
-                        obstacle[y].append(x)   #add an x codinat to the y cordinat
-                    else:
-                        obstacle[y] = [x]       #make a new x codinats list for a y cordinat key        
+                #if npblocks[y, x].obstacle:     #check if there is a obstacle on y,x cordinat 
+                if y in obstacle:           
+                    obstacle[y].append(x)   #add an x codinat to the y cordinat
+                else:
+                    obstacle[y] = [x]       #make a new x codinats list for a y cordinat key        
+        return self.save_file(file_name , {'grid':gird_size, 'obsticals':obstacle})
 
+    '''
+        save_file
+            This function saves a map in a bitmap file
+        input is
+            name: string, (the name of the file)
+    '''    
+    def save_file(self, file_name, file_data):
+        filepath = self.file_path(file_name)
         try:
-            with open(file_path(file_name), 'wb') as f:
-                pickle.dump({'grid':gird_size, 'obsticals':obstacle}, f, pickle.HIGHEST_PROTOCOL)  
+            with open(filepath, 'wb') as f:
+                pickle.dump(file_data, f, pickle.HIGHEST_PROTOCOL)  
         except:
             return False
         
         return True
+        
     '''
         load_map
             This function loads the map
@@ -56,7 +68,7 @@ class map_storage:
     '''
     def load(self, file_name):
         try: #try catch to load the map 
-            with open(file_path(file_name), 'rb') as f: #load map
+            with open(self.file_path(file_name), 'rb') as f: #load map
                 self.map = pickle.load(f)
                 return self.map
         except: #file not found
